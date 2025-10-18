@@ -27,6 +27,11 @@ const Home = () => {
     return (
         <div className="hero-gradient">
             <Header/>
+            {/* Hero Section */}
+            <div className="flex flex-col items-center gap-y-4 mt-10 px-[20%]">
+                <h1 className="">Snip it, Ship it.</h1>
+                <p className="text-center">Organize, search, and share code snippets in intuitive file hierarchies—starting with programming languages and customizable user folders.</p>
+            </div>
         </div>
   );
 };
