@@ -1,0 +1,166 @@
+@import "tailwindcss";
+
+:root {
+    /* Color: Primary */
+    --primary: #00ABE7; /* buttons, highlights */
+
+    /* Color: Secondary */
+    --secondary: #0081AF; /* links, secondary buttons */
+
+    /* Color: Background */
+    --background: #F6FAFB; /* Light, cool-toned background to match cyan/blue palette */
+
+    /* Color: Text */
+    --text-primary: #172026; /* Dark blue-gray for main text */
+    --text-secondary: #486672; /* Muted blue-gray for descriptions */
+    --text-on-primary: #FFFFFF; /* White for text on primary buttons */
+}
+
+/* ======== FONT PRESETS ======== */
+/* Header */
+.bbh-sans-hegarty-regular {
+  font-family: "BBH Sans Hegarty", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Regular (Default text) */
+.roboto-regular {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+/* Medium (Buttons, Emphasis) */
+.roboto-medium {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+/* Bold (Headings, Titles) */
+.roboto-bold {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+/* Light (Muted text, Descriptions) */
+.roboto-light {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+/* Italic (Quotes, Notes) */
+.roboto-italic {
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: italic;
+  font-variation-settings: "wdth" 100;
+}
+
+/* ======== HEADINGS PRESETS (H1–H6) ======== */
+/* H1 — App Title / Page Headings */
+h1 {
+  font-family: "BBH Sans Hegarty", sans-serif;
+  font-weight: 700;
+  font-size: 2.25rem;      /* ~36px */
+  line-height: 1.2;
+}
+
+/* H2 — Section Titles */
+h2 {
+  font-family: "BBH Sans Hegarty", sans-serif;
+  font-weight: 600;
+  font-size: 2rem;        /* ~32px */
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+/* H3 — Subsection Headings */
+h3 {
+  font-family: "BBH Sans Hegarty", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;      /* ~24px */
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+/* H4 — Smaller Section Labels */
+h4 {
+  font-family: "BBH Sans Hegarty", sans-serif;
+  font-weight: 500;
+  font-size: 1.25rem;     /* ~20px */
+  line-height: 1.4;
+  margin-bottom: 0.4rem;
+}
+
+/* H5 — Minor Headings or Labels */
+h5 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 1.1rem;      /* ~18px */
+  line-height: 1.5;
+  margin-bottom: 0.3rem;
+}
+
+/* H6 — Small Caps / Metadata */
+h6 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;     /* ~15px */
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+.hero-gradient {
+  height: 100vh; /* full screen */
+  background: 
+    linear-gradient(
+      145deg,
+      #F6FAFB,
+      #D8F1F9,
+      #B9E7F6,
+      #9ADDF4,
+      #7BD3F1,
+      #00ABE7,
+      #0081AF
+    ),
+    var(--background); /* base layer using your background color (#F6FAFB) for a clean, light foundation */
+}
+
+/* HIDE SCROLLBAR */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
