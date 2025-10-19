@@ -8,6 +8,7 @@ import AuthButtons from "./AuthButtons";
 const Header = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
+    
     return (
         <div className={Styles.headerContainer}>
             {/* [L]eft: Banner */}

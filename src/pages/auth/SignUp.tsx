@@ -1,19 +1,27 @@
-// [IMPORT] Components
-import Banner from "../../components/Header/Banner";
-import SlideshowPanel from "../../components/SignUp/SlideshowPanel";
-import SignUpPanel from "../../components/SignUp/SignUpPanel";
+import { useState, useEffect } from "react";
 import Styles from "../../styles/Styles";
 
+// [IMPORT] Components
+import MiniHeader from "../../components/Header/MiniHeader";
+import SignUpPanel from "../../components/Auth/SignUp/SignUpPanel";
+import SlideshowPanel from "../../components/Auth/SlideshowPanel";
+
 const SignUp = () => {
+    document.title = "Snippify: Sign Up"
 
     return (
-        <div className="flex min-h-screen">
-            {/* Sign Up Panel */}
-            <div className="w-1/2 px-30 py-12 bg-[var(--background)]">
-                <SignUpPanel/>
+        <div className="min-h-screen flex flex-col">
+            <MiniHeader/>
+            <div className="flex flex-1">
+                {/* Sign Up Panel */}
+                <div className="w-1/2 pl-20 pr-20 pt-2 bg-[var(--background)]">
+                    <SignUpPanel/>
+                </div>
+                {/* Feature Slideshow */}
+                <div className="w-1/2 bg-[linear-gradient(to_bottom,var(--primary),var(--secondary))] overflow-hidden">
+                    
+                </div>
             </div>
-            {/* Feature Slideshow */}
-            <SlideshowPanel/>
         </div>
     );
 };
