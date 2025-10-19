@@ -5,7 +5,7 @@
     --primary: #00ABE7; /* buttons, highlights */
 
     /* Color: Secondary */
-    --secondary: #0081AF; /* links, secondary buttons */
+    --secondary: #0081af; /* links, secondary buttons */
 
     /* Color: Background */
     --background: #F6FAFB; /* Light, cool-toned background to match cyan/blue palette */
@@ -130,6 +130,8 @@ html {
 }
 
 body {
+  color: var(--text-primary);
+  background-color: var(--background);
   min-height: 100%;
   margin: 0;
 
@@ -138,6 +140,14 @@ body {
   font-weight: 400;
   font-style: normal;
   font-variation-settings: "wdth" 100;
+}
+
+.hero-section {
+  background-image: url("/public/hero-section-bg.svg");
+  background-size: cover;       /* make image cover entire container */
+  background-position: center;  /* center the image */
+  background-repeat: no-repeat; /* don’t repeat */
+  height: 100vh;                /* full viewport height */
 }
 
 .hero-gradient {
