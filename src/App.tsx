@@ -11,6 +11,10 @@ import { ModalProvider } from "./context/ModalContext";
 import MainLayout from "./components/MainLayout";
 import MySnippets from "./pages/MySnippets";
 import MyLinks from "./pages/MyLinks";
+import About from "./pages/About";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import HelpSupport from "./pages/HelpSupport";
 
 function App() {
   return (
@@ -24,6 +28,10 @@ function App() {
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/my-snippets" element={<MySnippets/>}/>
           <Route path="/my-links" element={<MyLinks/>}/>
+          <Route path="/about" element={<About/>}/>
+          <Route path="/privacy-and-policy" element={<PrivacyPolicy/>}/>
+          <Route path="/terms-of-service" element={<TermsOfService/>}/>
+          <Route path="/help-and-support" element={<HelpSupport/>}/>
         </Route>
       </Routes>
     </ModalProvider>
