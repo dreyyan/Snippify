@@ -13,7 +13,14 @@ const Header = () => {
         if (user) setLoggedIn(true);
         else setLoggedIn(false);
     }, []);
-    
+
+    // [HANDLE] Logout
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token"); // if you're using JWT
+        setLoggedIn(false);
+    };
+
     return (
         <div className={Styles.headerContainer}>
             {/* [L]eft: Banner */}
@@ -30,7 +37,7 @@ const Header = () => {
 
             {/* [R]ight: Auth Buttons / Profile Section */}
             <div>
-                { loggedIn === true ? <ProfileSection/> : <AuthButtons/>}
+                { loggedIn === true ? <ProfileSection onLogout={handleLogout}/> : <AuthButtons/>}
             </div>
         </div>
     );

@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import Styles from "../../styles/Styles";
 import { useNavigate } from "react-router-dom";
 
-const ProfileSection = () => {
+const ProfileSection = ({ onLogout }) => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -24,7 +24,11 @@ const ProfileSection = () => {
 
     const handleGoToProfile = () => navigate("/my-profile");
     const handleGoToSettings = () => navigate("/settings");
-    const handleLogout = () => navigate("/login");
+
+    const handleLogout = () => {
+        if (onLogout) onLogout(); // call parent handler
+        navigate("/login");
+    };
 
     return (
         <div ref={dropdownRef} className="relative">
