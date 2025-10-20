@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import Styles from "../../../styles/Styles";
+import { useNavigate } from "react-router-dom";
 
 // [IMPORT] Components
 import LoginForm from "../Login/LoginForm";
 import OAuthButton from "../OAuthButton";
 
 const LoginPanel = () => {
+    const navigate = useNavigate();
+
+    // [HANDLE] OAuth Login
     const handleGoogleLogin = () => {
         
-    };
-
-    const handleFacebookLogin = () => {
-
     };
 
     const handleGitHubLogin = () => {

@@ -45,6 +45,10 @@ const SignUpForm = () => {
             // ERROR: Error response from backend
             if (response.ok) {
                 alert("Login successful!");
+                
+                // Save the user data to localStorage
+                localStorage.setItem("user", JSON.stringify(data.data.user));
+
                 // Navigate to Dashboard
                 navigate('/dashboard');
             } else {
@@ -59,7 +63,7 @@ const SignUpForm = () => {
     
     return (
         <form className="flex flex-col">
-            <text className="text-3xl font-bold mb-4">Login</text>
+            <p className="text-3xl font-bold mb-4">Login</p>
             <div className="space-y-4 mb-3">
                 <div className={Styles.field}>
                     <label className={Styles.inputLabel}>Username or Email</label>

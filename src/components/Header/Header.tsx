@@ -2,12 +2,17 @@ import { Link } from "react-router-dom";
 import Styles from "../../styles/Styles";
 import Banner from "./Banner";
 import ProfileSection from "./ProfileSection";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AuthButtons from "./AuthButtons";
 
 const Header = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
+    useEffect(() => {
+        const user = localStorage.getItem("user");
+        if (user) setLoggedIn(true);
+        else setLoggedIn(false);
+    }, []);
     
     return (
         <div className={Styles.headerContainer}>

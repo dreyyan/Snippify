@@ -79,7 +79,7 @@ const SignUpForm = () => {
 
     return (
         <form className="flex flex-col">
-            <text className="text-3xl font-bold mb-4">Sign Up</text>
+            <p className="text-3xl font-bold mb-4">Sign Up</p>
             <div className="space-y-2 mb-6">
                 <div className={Styles.field}>
                     <label className={Styles.inputLabel}>Full Name</label>

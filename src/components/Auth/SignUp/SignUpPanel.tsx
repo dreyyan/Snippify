@@ -1,17 +1,16 @@
 import { Link } from "react-router-dom";
 import Styles from "../../../styles/Styles";
+import { useNavigate } from "react-router-dom";
 
 // [IMPORT] Components
 import SignUpForm from "./SignUpForm";
 import OAuthButton from "../OAuthButton";
 
 const SignUpPanel = () => {
+    const navigate = useNavigate();
+
     const handleGoogleSignUp = () => {
         
-    };
-
-    const handleFacebookSignUp = () => {
-
     };
 
     const handleGitHubSignUp = () => {

@@ -14,6 +14,13 @@
     --text-primary: #172026; /* Dark blue-gray for main text */
     --text-secondary: #486672; /* Muted blue-gray for descriptions */
     --text-on-primary: #FFFFFF; /* White for text on primary buttons */
+
+    /* Semantic Colors for Dialogs */
+    --dialog-alert: #FFB347; /* Muted orange for alert borders and icons */
+    --dialog-error: #E63946; /* Red for error borders and icons */
+    --dialog-info: var(--secondary); /* Reuse secondary for info dialogs */
+    --dialog-confirm: var(--primary); /* Reuse primary for confirm dialogs */
+    --dialog-prompt: var(--primary); /* Reuse primary for prompt dialogs */
 }
 
 /* ======== FONT PRESETS ======== */

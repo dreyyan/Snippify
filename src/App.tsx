@@ -5,18 +5,24 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import SignUp from "./pages/auth/SignUp";
 import Login from "./pages/auth/Login";
-import LoginPanel from "./components/Auth/Login/LoginPanel";
-import SignUpPanel from "./components/Auth/SignUp/SignUpPanel";
+
+// Context
+import { ModalProvider } from "./context/ModalContext";
+import MainLayout from "./components/MainLayout";
 
 function App() {
   return (
-    <Routes>
-      {/* Default Redirect */}
-      <Route path="/" element={<Home/>}/>
-      <Route path="/login" element={<Login />} />
-      <Route path="/sign-up" element={<SignUp />} />
-      <Route path="/dashboard" element={<Dashboard/>}/>
-    </Routes>
+    <ModalProvider>
+      <Routes>
+        <Route element={<MainLayout/>}>
+          {/* Default Redirect */}
+          <Route path="/" element={<Home/>}/>
+          <Route path="/login" element={<Login />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/dashboard" element={<Dashboard/>}/>
+        </Route>
+      </Routes>
+    </ModalProvider>
   );
 }
 

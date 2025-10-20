@@ -10,8 +10,7 @@ const SignUp = () => {
     document.title = "Snippify: Sign Up"
 
     return (
-        <div className="min-h-screen flex flex-col">
-            <MiniHeader/>
+        <div className="flex flex-1">
             <div className="flex flex-1">
                 {/* Sign Up Panel */}
                 <div className="w-1/2 pl-20 pr-20 pt-2 bg-[var(--background)]">
