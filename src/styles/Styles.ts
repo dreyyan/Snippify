@@ -14,7 +14,7 @@ const Styles = {
     // Form
     formInput: "border-1 border-[rgba(90,90,90,0.2)] shadow-sm rounded-sm text-sm mt-1 px-3 py-2 focus:outline-none focus:ring-0",
     inputLabel: "text-[12px] font-semibold",
-    field: "flex flex-col",
+    field: "flex flex-col relative",
 
     // Text
     textLink: "text-xs text-[var(--secondary)] underline underline-offset-2 transition-colors duration-300 hover:text-[var(--text-secondary)]",

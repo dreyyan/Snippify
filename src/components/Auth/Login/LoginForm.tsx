@@ -6,9 +6,16 @@ const SignUpForm = () => {
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
-        usernameEmail: "",
-        password: ""
+        usernameEmail: "dreyyan",
+        password: "dreyyan123"
     });
+    const [showPassword, setShowPassword] = useState(false);
+
+    // [HANDLE] Show/hide password
+    const handleTogglePassword = () => {
+        if (showPassword) setShowPassword(false);
+        else setShowPassword(true);        
+    };
 
     // [HANDLE] Input field changes
     const handleInputChange = (e) => {
@@ -78,12 +85,15 @@ const SignUpForm = () => {
                 <div className={Styles.field}>
                     <label className={Styles.inputLabel}>Password</label>
                     <input
-                    type="password"
+                    type={`${showPassword ? 'password' : 'text'}`}
                     name="password"
                     placeholder="Password"
                     value={formData.password}
                     onChange={handleInputChange}
                     required className={Styles.formInput}/>
+                    <button type="button" onClick={handleTogglePassword} className="cursor-pointer absolute right-3 top-10 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--primary)]">
+                        <img src={`${showPassword === true ? 'show-password' : 'hide-password'}-icon.svg`} className="size-5"/>
+                    </button>
                 </div>
             </div>
             {/* Other Options */}

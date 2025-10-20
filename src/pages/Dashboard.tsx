@@ -11,6 +11,8 @@ import Footer from "../components/Footer/Footer";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
+    document.title = "Snippify: Dashboard";
+    
     const [user, setUser] = useState(null);
 
     // [EFFECT] Retrieve user data from local storage

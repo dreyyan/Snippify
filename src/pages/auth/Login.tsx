@@ -1,8 +1,4 @@
-import { useState, useEffect } from "react";
-import Styles from "../../styles/Styles";
-
 // [IMPORT] Components
-import MiniHeader from "../../components/Header/MiniHeader";
 import LoginPanel from "../../components/Auth/Login/LoginPanel";
 import SlideshowPanel from "../../components/Auth/SlideshowPanel";
 
