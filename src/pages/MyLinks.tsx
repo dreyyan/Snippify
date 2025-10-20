@@ -3,7 +3,6 @@ import "../styles/index.css";
 import Styles from "../styles/Styles";
 
 // [IMPORT] Components
-import Footer from "../components/Footer/Footer";
 import { useEffect, useState } from "react";
 
 const MyLinks = () => {
@@ -20,13 +19,13 @@ const MyLinks = () => {
     }, []);
 
     return (
-        <div>
-            {/* Overview Section */}
-            <div>
-                <h3>{}</h3>
-            </div>
-            <Footer/>
-        </div>
+        <>
+            {/* Shared Links List - Display all shared snippet URLs with details */}
+            {/* Team Activity - Show snippets shared with or forked by team members */}
+            {/* Link Management - Generate, copy, or revoke shareable links */}
+            {/* Link Analytics - Display views or interactions for shared links */}
+            {/* Header and Footer - Consistent navigation and branding */}
+        </>
   );
 };
 

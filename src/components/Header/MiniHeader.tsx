@@ -4,10 +4,7 @@ import Banner from "./Banner";
 const MiniHeader = () => {
     return (
         <div className={Styles.headerContainer}>
-            {/* Banner */}
-            <div className="">
-                <Banner/>
-            </div>
+            <Banner/>
         </div>            
     );
 };

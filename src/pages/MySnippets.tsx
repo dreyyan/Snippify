@@ -3,7 +3,6 @@ import "../styles/index.css";
 import Styles from "../styles/Styles";
 
 // [IMPORT] Components
-import Footer from "../components/Footer/Footer";
 import { useEffect, useState } from "react";
 
 const MySnippets = () => {
@@ -20,13 +19,13 @@ const MySnippets = () => {
     }, []);
 
     return (
-        <div>
-            {/* Overview Section */}
-            <div>
-                <h3>{}</h3>
-            </div>
-            <Footer/>
-        </div>
+        <>
+            {/* Snippet List - Display all user snippets with filters and sorting */}
+            {/* Create Snippet Form - Form for adding new snippets with title, code, language */}
+            {/* Folder Organization - Tools to organize snippets into custom folders */}
+            {/* Snippet Actions - Edit, delete, or share individual snippets */}
+            {/* Header and Footer - Consistent navigation and branding */}
+        </>
   );
 };
 

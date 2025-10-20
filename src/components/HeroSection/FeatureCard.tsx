@@ -1,5 +1,3 @@
-import Styles from "../../styles/Styles";
-
 interface FeatureCardProps {
     iconUrl: string;
     title: string;

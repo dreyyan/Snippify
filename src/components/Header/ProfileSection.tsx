@@ -22,10 +22,11 @@ const ProfileSection = ({ onLogout }) => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [isOpen]);
 
-    const handleGoToProfile = () => navigate("/my-profile");
-    const handleGoToSettings = () => navigate("/settings");
+    const handleGoToProfile = () => { setIsOpen(false); navigate("/my-profile"); }
+    const handleGoToSettings = () => { setIsOpen(false); navigate("/settings"); }
 
     const handleLogout = () => {
+        setIsOpen(false);
         if (onLogout) onLogout(); // call parent handler
         navigate("/login");
     };
