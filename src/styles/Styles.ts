@@ -18,6 +18,14 @@ const Styles = {
 
     // Text
     textLink: "text-xs text-[var(--secondary)] underline underline-offset-2 transition-colors duration-300 hover:text-[var(--text-secondary)]",
+
+    // My Snippets
+    tabsContainer: "flex gap-x-2",
+    tabActiveButton: "text-xs font-bold px-4 py-2 rounded-t-md text-[var(--text-primary)] bg-white transition-colors duration-200 cursor-pointer",
+    tabButton: "text-xs font-bold px-4 py-2 rounded-t-md text-[var(--text-primary)] bg-[var(--background)] transition-colors duration-200 cursor-pointer",
+    container: "grid grid-cols-5 box-border bg-white shadow-md px-12 py-14",
+    folderShortcut: "shadow-sm cursor-pointer",
+    fileItem: "shadow-xs w-full bg-[var(--text-secondary)]"
 };
 
 export default Styles;
