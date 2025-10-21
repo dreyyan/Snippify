@@ -1,11 +1,10 @@
 import Styles from "../../styles/Styles";
 
-const Drafts = () => {
+const Recents = () => {
     return (
       <div className={Styles.container}>
-        <h4>Drafts</h4>
       </div>
     );
 };
 
-export default Drafts;
+export default Recents;
