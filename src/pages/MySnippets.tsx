@@ -1,12 +1,12 @@
 // [IMPORT] Styles
-import AllSnippets from "../components/MySnippets/AllSnippets";
-import Drafts from "../components/MySnippets/Recents";
-import Favorites from "../components/MySnippets/Favorites";
 import "../styles/index.css";
 import Styles from "../styles/Styles";
 
 // [IMPORT] Components
 import { useEffect, useState } from "react";
+import MyFolders from "../components/MySnippets/MyFolders";
+import Drafts from "../components/MySnippets/Recents";
+import Favorites from "../components/MySnippets/Favorites";
 
 interface Snippet {
     id: number;
@@ -45,7 +45,7 @@ const MySnippets = () => {
             </div>
             {/* Tab render based on page count */}
             {page === 1 &&
-                <AllSnippets/>
+                <MyFolders/>
             }
             {page === 2 &&
                 <Drafts/>
