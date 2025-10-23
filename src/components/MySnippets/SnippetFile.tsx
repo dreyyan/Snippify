@@ -9,7 +9,7 @@ interface SnippetFileProps {
 const SnippetFile: React.FC<SnippetFileProps> = ({ title, language, updatedAt }) => {
     return (
         <button className={Styles.fileItem}>
-            <p>{title}</p>
+            <p className="font-semibold">{title}</p>
             <p>{language}</p>
             <p>{updatedAt.toDateString()}</p>
         </button>

@@ -80,7 +80,7 @@ const MyFolders = () => {
 			</div>
 		) : ( // File Hierarchy
 		<>
-		<div className="col-span-2  border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[#ebebeb]">
+		<div className="col-span-2  border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[var(--secondary)]">
 			{/* Folder Operations */}
 			{/* <div className="flex justify-end px-3 py-3 shadow-lg bg-[var(--primary)]"> */}
 				{/* Add Folder */}
@@ -91,7 +91,7 @@ const MyFolders = () => {
 
 			{/* Folders */}
 			{folders.map((folder, index) => (
-				<button onClick={() => setSelectedSnippet(index + 1)} className={`${Styles.folderShortcut} ${index === selectedSnippet - 1 && 'bg-white shadow-sm'}`}>{folder}</button>
+				<button onClick={() => setSelectedSnippet(index + 1)} className={`${Styles.folderShortcut} ${index === selectedSnippet - 1 && 'shadow-sm bg-white text-[var(--primary)]'}`}>{folder}</button>
 			))}
 		</div>
 
@@ -100,7 +100,7 @@ const MyFolders = () => {
 		<div
 		onClick={handleOutsideClick}
 		onContextMenu={handleEmptyAreaContextMenu}
-		className="border border-[rgba(90,90,90,0.2)] col-span-5 shadow-md bg-white flex flex-col items-center min-h-100">
+		className="border border-l-0 border-[rgba(90,90,90,0.2)] col-span-5 shadow-md bg-white flex flex-col items-center min-h-100">
 			{/* Header */}
 			<span className="w-full flex justify-between px-4 py-2 [&>p]:text-xs">
 				<p>Name</p>
