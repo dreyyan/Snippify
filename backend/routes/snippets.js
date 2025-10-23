@@ -15,7 +15,41 @@ const { successResponse, errorResponse } = require('../utils/response');
 // =================================================================
 // [GET] Retrieve all user snippets
 router.get('/', (req, res) => {
+    try {
+        const snippets = prisma.snippets.findMany();
+        res.status(200).json(successResponse("Snippets retrieved successfully", snippets));
+    } catch (err) {
+        res.status(400).json(errorResponse("Failed to fetch snippets"));
+    }
+});
 
+// [GET] Retrieve snippets in a specific folder
+router.get('/:folder', (req, res) => {
+    const folder = req.params.folder;
+
+    try {
+        const snippets = prisma.snippets.findUnique({
+            where: {},
+        });
+        res.status(200).json(successResponse(`${folder} snippets retrieved successfully`, snippets));
+    } catch (err) {
+        res.status(400).json(errorResponse(`Failed to fetch snippets from ${folder}`));
+    }
+});
+
+// [GET] Retrieve a snippet
+router.get('/:folder/:id', (req, res) => {
+    const folder = req.params.folder;
+    const id = req.params.id;
+
+    try {
+        const snippet = prisma.snippets.findUnique({
+            where: { id: parseInt(id) },
+        });
+        res.status(200).json(successResponse("Snippet retrieved successfully", snippet));
+    } catch (err) {
+        res.status(400).json(errorResponse("Failed to fetch snippet"));
+    }
 });
 
 // [POST] Create a snippet
