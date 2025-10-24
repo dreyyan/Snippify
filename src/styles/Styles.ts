@@ -9,7 +9,9 @@ const Styles = {
     
     // Buttons
     primaryButton: "text-sm font-bold w-full px-4 py-2 rounded-full text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[#018ec2] cursor-pointer",
-    secondaryButton: "group border border-[var(--secondary)] flex justify-center items-center gap-x-2 text-[var(--text-primary)] w-full px-3 py-2 rounded-md cursor-pointer transition-colors duration-300 hover:bg-[var(--primary)] hover:border-[var(--background)] [&>p]:hover:text-[var(--background)]",
+    primaryModalButton: "text-sm font-bold w-16 px-2 py-2 rounded-md text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[#018ec2] cursor-pointer",
+    secondaryButton: "group text-[var(--text-secondary)] text-xs flex justify-center items-center gap-x-2 px-3 py-2 rounded-md cursor-pointer transition-colors duration-300 hover:text-[var(--text-primary)]",
+    oAuthButton: "group border text-[var(--text-secondary)] border-[var(--secondary)] text-xs flex justify-center items-center gap-x-2 w-full px-3 py-2 rounded-md cursor-pointer transition-colors duration-300 hover:text-[var(--background)] hover:bg-[var(--secondary)] hover:border-[var(--secondary)] [&>p]:hover:text-[var(--background)]",
 
     // Form
     formInput: "border-1 border-[rgba(90,90,90,0.2)] shadow-sm rounded-sm text-sm mt-1 px-3 py-2 focus:outline-none focus:ring-0",
@@ -25,9 +27,11 @@ const Styles = {
     tabButton: "flex items-center gap-x-2 text-sm font-bold px-4 py-2 rounded-t-md text-[var(--text-primary)] bg-[var(--background)] transition-colors duration-200 cursor-pointer",
     container: "grid grid-cols-7 box-border bg-white shadow-md px-12 py-14",
     folderShortcut: "text-xs text-left pl-4 font-bold text-[var(--background)] py-2 cursor-pointer",
-    fileItem: "flex justify-between px-4 py-1 text-sm w-full border-b border-[rgba(90,90,90,0.2)] hover:border-t-red-500 cursor-pointer",
+    snippetItem: "flex justify-between py-1 text-sm w-full border-[rgba(90,90,90,0.2)] hover:border-t-red-500 cursor-pointer",
     folderItem: "flex justify-between px-4 py-1 text-sm w-full border-b border-[rgba(90,90,90,0.2)] hover:border-t-red-500 cursor-pointer",
-    snippetFileButton: "text-start text-sm w-full px-2 py-1 hover:bg-[rgba(90,90,90,0.1)] cursor-pointer"
+    snippetFileButton: "text-start text-sm w-full px-2 py-1 hover:bg-[rgba(90,90,90,0.1)] cursor-pointer",
+
+    // Modal
 };
 
 export default Styles;

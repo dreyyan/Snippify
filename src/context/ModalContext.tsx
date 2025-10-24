@@ -1,8 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, type ReactNode } from "react";
-import DialogBox from "../components/DialogBox";
+import Modal from "../components/Modal";
 
-interface DialogBoxProps {
+interface ModalProps {
   type?: 'alert' | 'info' | 'confirm' | 'error' | 'prompt';
   title?: string;
   content?: string;
@@ -14,7 +14,7 @@ interface DialogBoxProps {
 }
 
 interface ModalContextType {
-  openModal: (props: DialogBoxProps) => void;
+  openModal: (props: ModalProps) => void;
   closeModal: () => void;
 }
 
@@ -27,10 +27,10 @@ export const useModal = () => {
 };
 
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [modalProps, setModalProps] = useState<DialogBoxProps | null>(null);
+  const [modalProps, setModalProps] = useState<ModalProps | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const openModal = (props: DialogBoxProps) => {
+  const openModal = (props: ModalProps) => {
     setModalProps(props);
     setIsOpen(true);
   };
@@ -44,7 +44,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
       {modalProps && (
-        <DialogBox
+        <Modal
           {...modalProps}
           isOpen={isOpen}
           onClose={closeModal}

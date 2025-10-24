@@ -1,6 +1,6 @@
 import Styles from "../../styles/Styles";
 
-interface SnippetFileProps {
+interface SnippetItemProps {
     fileData: {
         title: string;
         language: string;
@@ -9,18 +9,17 @@ interface SnippetFileProps {
     }
 };
 
-const SnippetFile: React.FC<SnippetFileProps> = ({ fileData }) => {
+const SnippetItem: React.FC<SnippetItemProps> = ({ fileData }) => {
     const { title, language, content, updatedAt } = fileData;
     const dateModified = new Date(updatedAt);
 
     return (
-        <button className={Styles.fileItem}>
+        <button className={Styles.snippetItem}>
             <p className="font-semibold">{title}</p>
             <p>{language}</p>
-            <p>{content}</p>
             <p>{dateModified.toDateString()}</p>
         </button>
     );
 };
 
-export default SnippetFile;
+export default SnippetItem;

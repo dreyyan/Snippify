@@ -1,33 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Styles from "../../styles/Styles";
-import SnippetFile from "./SnippetFile";
-import AddSnippetMenu from "./AddSnippetMenu";
-import Folder from "./Folder";
-
-interface Snippet {
-    id: number;
-    title: string;
-    language: string;
-    content: string;
-	updatedAt: Date;
-}
-
-interface Folder {
-    id: number;
-    name: string;
-    snippets: Snippet[];
-}
+import SnippetFile from "./SnippetItem";
+import FolderItem from "./FolderItem";
+import { fetchUserData, getToken } from "../../utils/auth";
+import { useModal } from "../../context/ModalContext";
+import type { Folder, Snippet, SnippetData } from "../../utils/types";
+import NewSnippetForm from "./NewSnippetForm";
 
 const MyFolders = () => {
 	// States
 	const [selectedSnippet, setSelectedSnippet] = useState(1);
-	const [showAddSnippetMenu, setShowAddSnippetMenu] = useState(false);
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [snippets, setSnippets] = useState<Snippet[]>([]);
+	const [snippetData, setSnippetData] = useState<SnippetData>({
+    title: '',
+    language: '',
+    content: ''
+	});
 	const [menu, setMenu] = useState<{ 
-		visible: boolean; 
-		x: number; 
-		y: number; 
+		visible: boolean;
+		x: number;
+		y: number;
 		type: "file" | "folder" | "empty" | ""; 
 		target?: string; 
 	}>({
@@ -36,59 +29,97 @@ const MyFolders = () => {
 		y: 0,
 		type: "",
 	});
-
-	const fetchData = async () => {
-		try {
-			const token = localStorage.getItem("token");
-
-			if (!token) {
-				console.error("No token found, user must login first.");
-				return;
-			}
-
-			// Get user folder and snippet data
-			// Fetch folders
-			const folderResponse = await fetch('http://localhost:3000/api/folders', {
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${token}`,
-				},
-			});
-
-			const folderData = await folderResponse.json();
-
-			const snippetResponse = await fetch('http://localhost:3000/api/snippets', {
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${token}`,
-				},
-			});
-
-			const snippetData = await snippetResponse.json();
-
-			// Update folders and snippets state
-			if (folderResponse.ok) setFolders(folderData.data);
-			if (snippetResponse.ok) setSnippets(snippetData.data);
-		}  catch (err) {
-			console.error("Error fetching data:", err);
-			alert("An error occured while trying to fetch user data.");
-		}
-	};
-
-	// [EFFECT] Fetch data (user folders and snippets)
+	const { openModal, closeModal } = useModal();
+	
+	// [EFFECT] Fetch user data on mount (user folders and snippets)
 	useEffect(() => {
+		const fetchData = async () => {
+			const data = await fetchUserData();
+
+			// If data exists, update folders and snippets states
+			if (data) {
+				setFolders(data.folders);
+				setSnippets(data.snippets);
+			}
+		};
+
 		fetchData();
 	}, []);
 
-	// [HANDLE] Toggle visibility of add snippet modal
-	const toggleSnippetMenu = () => {
-		setShowAddSnippetMenu(prev => !prev);
+	// ============================== General Implementation ==============================
+	// [HANDLE: Hide/Close Menu] When user clicks outside the context menu
+	const handleOutsideClick = () => {
+		if (menu.visible) setMenu({ ...menu, visible: false })
 	};
 
-	// [HANDLE] Add a folder in the file hierarchy
+	// [HANDLE: Show Menu] When user right clicks the snippet files' empty area
+	const handleEmptyAreaContextMenu = (e: React.MouseEvent) => {
+		e.preventDefault();
+		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'empty' });
+	};
+
+	// ============================== Snippets Implementation ==============================
+	// [HANDLE: Show Menu] When user right clicks a snippet file
+	const handleSnippetFileContextMenu = (e: React.MouseEvent, fileName: string) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'file', target: fileName });
+	};
+
+	// [HANDLE: Add Snippet] Send a request to create a new snippet for the current user and update the local state
+	const handleAddSnippet = async (snippetData: Omit<Snippet, 'id' | 'updatedAt'>) => {
+		try {
+			const token = getToken();
+			const response = await fetch('http://localhost:3000/api/snippets', {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`,
+				},
+				body: JSON.stringify(snippetData),
+			});
+
+			const data = await response.json();
+
+			// If successful request, update folders state 
+			if (response.ok) {
+				console.info(`Snippet "${snippetData.title}" created successfully.`);
+				alert("Snippet created!");
+				setSnippets(prev => [...prev, data.data]);
+			} else {
+				console.error("Failed to create snippet:", data.message);
+				alert(data.message || "Failed to create snippet.");
+			}
+		} catch (err) {
+			console.error("Error creating snippet:", err);
+			alert("An error occurred while creating snippet.");
+		}
+	};
+
+	// [HANDLE: Rename Snippet] Send a request to rename the user's selected folder and update the local state
+	const handleRenameSnippet = () => {
+		
+	};
+
+	// [HANDLE: Delete Snippet] Send a request to delete the user's selected folder and update the local state
+	const handleDeleteSnippet = () => {
+		
+	};
+
+	// ============================== Folders Implementation ==============================
+	// [HANDLE: Show Menu] When user right clicks a folder
+	const handleFolderContextMenu = (e: React.MouseEvent, folderName: string) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'folder', target: folderName });
+	};
+	
+	// [HANDLE: Add Folder] Send a request to create a new folder for the current user and update the local state
 	const handleAddFolder = async (name: string) => {
 		try {
-			const token = localStorage.getItem("token");
+			const token = getToken();
 			const response = await fetch('http://localhost:3000/api/folders', {
 				method: "POST",
 				headers: {
@@ -100,84 +131,50 @@ const MyFolders = () => {
 
 			const data = await response.json();
 
-        if (response.ok) {
-            console.info(`Folder "${name}" added successfully.`);
-            alert("Folder created!");
-            setFolders(prev => [...prev, data.data]);
-        } else {
-            console.error("Failed to add folder:", data.message);
-            alert(data.message || "Failed to add folder.");
-        }
+			// If successful request, update folders state 
+			if (response.ok) {
+				console.info(`Folder "${name}" added successfully.`);
+				alert("Folder created!");
+				setFolders(prev => [...prev, data.data]);
+			} else {
+				console.error("Failed to add folder:", data.message);
+				alert(data.message || "Failed to add folder.");
+			}
 		} catch (err) {
 			console.error("Error adding folder:", err);
 			alert("An error occurred while adding folder.");
 		}
 	};
 
-	// [HANDLE] User right clicks file area
-	const handleEmptyAreaContextMenu = (e: React.MouseEvent) => {
-		e.preventDefault();
-		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'empty' });
+	// [HANDLE: Rename Folder] Send a request to rename the user's selected folder and update the local state
+	const handleRenameFolder = () => {
+		
 	};
 
-	// [HANDLE] User right clicks folder
-	const handleFolderContextMenu = (e: React.MouseEvent, folderName: string) => {
-		e.preventDefault();
-		e.stopPropagation();
-
-		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'folder', target: folderName });
+	// [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
+	const handleDeleteFolder = () => {
+		
 	};
 
-	// [HANDLE] User right clicks snippet file
-	const handleSnippetFileContextMenu = (e: React.MouseEvent, fileName: string) => {
-		e.preventDefault();
-		e.stopPropagation();
-
-		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'file', target: fileName });
-	};
-
-	// [HANDLE] User clicks outside context menu
-	const handleOutsideClick = () => {
-		if (menu.visible) setMenu({ ...menu, visible: false })
-	};
-
-		// [HANDLE] File operations
-	const handleRenameSnippet = () => {
-		setMenu({ ...menu, visible: false });
-	};
-
-	const handleDeleteSnippet = () => {
-		setMenu({ ...menu, visible: false });
-	};
-
-	const handleAddSnippet = () => {
-		toggleSnippetMenu();
-		setMenu({ ...menu, visible: false });
-	};
-	
-	// [HANDLE] File operations
-	const handleRenameSnippet = () => {
-		setMenu({ ...menu, visible: false });
-	};
-
-	const handleDeleteSnippet = () => {
-		setMenu({ ...menu, visible: false });
-	};
-
-	const handleAddSnippet = () => {
-		toggleSnippetMenu();
-		setMenu({ ...menu, visible: false });
+	// ============================== Modal Display Implementation ==============================
+	const handleShowNewSnippetModal = () => {
+	openModal({
+		type: 'prompt',
+		title: 'Create Snippet',
+		size: 'lg',
+		children: (
+		<NewSnippetForm
+			onSubmit={data => {
+				handleAddSnippet(data); // Directly call handleAddSnippet with form data
+                closeModal(); // Close the modal after submission
+			}}
+		/>
+		)
+	});
 	};
 
 	return (
 	<div className={Styles.container}>
-		{/* Modal - Add Snippet */}
-		{showAddSnippetMenu ? (
-			<div className="">
-				<AddSnippetMenu onClose={toggleSnippetMenu}/>
-			</div>
-		) : ( // File Hierarchy
-		<>
 		<div className="col-span-2  border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[var(--secondary)]">
 			{/* Folders */}
 			{folders.map((folder, index) => (
@@ -201,7 +198,7 @@ const MyFolders = () => {
 			</span>
 
 				{/* Snippets */}
-				<div className="w-full">
+				<div className="w-full h-full">
 					{snippets.map((snippet, index) => (
 						<div
 							key={snippet.id}
@@ -223,7 +220,7 @@ const MyFolders = () => {
 						}}
 						className="absolute flex flex-col items-start bg-white border border-gray-300 rounded-md p-1 shadow-md"
 					>
-						{menu.type === "file" ? (
+						{menu.type === "file" && (
 							<>
 								<button onClick={handleRenameSnippet} className={Styles.snippetFileButton}>
 									Rename Snippet
@@ -232,9 +229,11 @@ const MyFolders = () => {
 									Delete Snippet
 								</button>
 							</>
-						) : (
+						)}
+						
+						{menu.type === "empty" && (
 							<>
-								<button onClick={handleAddSnippet} className={Styles.snippetFileButton}>
+								<button onClick={handleShowNewSnippetModal} className={Styles.snippetFileButton}>
 									New Snippet
 								</button>
 								<button onClick={() => handleAddFolder("New Folder")} className={Styles.snippetFileButton}>
@@ -245,8 +244,6 @@ const MyFolders = () => {
 					</div>
 				)}
 		</div>
-		</>
-		)}
 	</div>
 	);
 };

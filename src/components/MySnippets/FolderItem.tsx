@@ -1,10 +1,10 @@
 import Styles from "../../styles/Styles";
 
-interface FolderProps {
+interface FolderItemProps {
     name: string;
 };
 
-const Folder: React.FC<FolderProps> = ({ name }) => {
+const FolderItem: React.FC<FolderItemProps> = ({ name }) => {
     return (
         <button className={Styles.folderItem}>
             <p className="font-semibold">{name}</p>
@@ -12,4 +12,4 @@ const Folder: React.FC<FolderProps> = ({ name }) => {
     );
 };
 
-export default Folder;
+export default FolderItem;

@@ -55,11 +55,11 @@ router.get('/:folder/:id', verifyToken, async (req, res) => {
 
 // [POST] Add a snippet
 router.post('/', verifyToken, async (req, res) => {
-    const { title, language, content, userId } = req.body;
+    const { title, language, content } = req.body;
 
     try {
         const snippet = await prisma.snippet.create({
-            data: { title, language, content, userId }
+            data: { title, language, content, userId: req.userId }
         });
         res.status(201).json(successResponse("Snippet created successfully", snippet));
     } catch (err) {
