@@ -13,6 +13,7 @@ const app = express()
 // [IMPORT] Routers
 const userRoutes = require('./routes/users')
 const authRoutes = require('./routes/auth')
+const folderRoutes = require('./routes/folders')
 const snippetsRoutes = require('./routes/snippets')
 
 // =================================================================
@@ -40,6 +41,7 @@ app.use((err, req, res, next) => {
 // [ROUTES]
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/folders', folderRoutes);
 app.use('/api/snippets', snippetsRoutes);
 
 // =================================================================

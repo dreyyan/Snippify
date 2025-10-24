@@ -11,12 +11,13 @@ const router = express.Router();
 
 // [IMPORT] Utility functions
 const { successResponse, errorResponse } = require('../utils/response');
+const { verifyToken } = require('../middleware/authMiddleware');
 
 // =================================================================
 // [GET] Retrieve all user snippets
-router.get('/', (req, res) => {
+router.get('/',  verifyToken, async (req, res) => {
     try {
-        const snippets = prisma.snippets.findMany();
+        const snippets = await prisma.snippet.findMany();
         res.status(200).json(successResponse("Snippets retrieved successfully", snippets));
     } catch (err) {
         res.status(400).json(errorResponse("Failed to fetch snippets"));
@@ -24,11 +25,11 @@ router.get('/', (req, res) => {
 });
 
 // [GET] Retrieve snippets in a specific folder
-router.get('/:folder', (req, res) => {
+router.get('/:folder', verifyToken, async (req, res) => {
     const folder = req.params.folder;
 
     try {
-        const snippets = prisma.snippets.findUnique({
+        const snippets = await prisma.snippet.findUnique({
             where: {},
         });
         res.status(200).json(successResponse(`${folder} snippets retrieved successfully`, snippets));
@@ -38,12 +39,12 @@ router.get('/:folder', (req, res) => {
 });
 
 // [GET] Retrieve a snippet
-router.get('/:folder/:id', (req, res) => {
+router.get('/:folder/:id', verifyToken, async (req, res) => {
     const folder = req.params.folder;
     const id = req.params.id;
 
     try {
-        const snippet = prisma.snippets.findUnique({
+        const snippet = await prisma.snippet.findUnique({
             where: { id: parseInt(id) },
         });
         res.status(200).json(successResponse("Snippet retrieved successfully", snippet));
@@ -52,37 +53,37 @@ router.get('/:folder/:id', (req, res) => {
     }
 });
 
-// [POST] Create a snippet
-router.post('/', async (req, res) => {
-    const { title, language, content } = req.body;
+// [POST] Add a snippet
+router.post('/', verifyToken, async (req, res) => {
+    const { title, language, content, userId } = req.body;
 
     try {
         const snippet = await prisma.snippet.create({
             data: { title, language, content, userId }
         });
-        res.status(201).json(successResponse("Snippet created successfully", snipet));
+        res.status(201).json(successResponse("Snippet created successfully", snippet));
     } catch (err) {
         res.status(400).json(errorResponse("Failed to create a snippet", err.message));
     }
 });
 
 // [PATCH] Update a snippet
-router.patch('/:id', (req, res) => {
+router.patch('/:id', verifyToken, async (req, res) => {
 
 });
 
 
 // [DELETE] Delete a snippet
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     const id = req.params.id;
 
     try {
         const deletedSnippet = await prisma.snippet.delete({
-            where: { userId: parseInt(id) }
+            where: { id: parseInt(id) }
         });
-        res.status(201).json(successResponse("Snippet deleted successfully", deletedSnippet));
+        res.status(200).json(successResponse("Snippet deleted successfully", deletedSnippet));
     } catch (err) {
-        res.status(404).json(successResponse("Failed to delete a snippet", err.message));
+        res.status(404).json(errorResponse("Failed to delete a snippet", err.message));
     }
 });
 

@@ -11,10 +11,11 @@ const router = express.Router();
 
 // [IMPORT] Utility functions
 const { successResponse, errorResponse } = require('../utils/response');
+const { verifyToken } = require('../middleware/authMiddleware');
 
 // =================================================================
 // [GET] Retrieve all users
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const users = await prisma.user.findMany({
             select: { id: true, name: true, email: true, username: true, createdAt: true }
@@ -26,7 +27,7 @@ router.get('/', async (req, res) => {
 });
 
 // [GET] Retrieve a specific user
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     const id = req.params.id;
 
     try {
@@ -40,7 +41,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 // [DELETE] Remove user from database
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     const id = req.params.id;
 
     try {

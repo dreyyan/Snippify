@@ -53,11 +53,12 @@ router.post('/login', async (req, res) => {
             return res.status(401).json(errorResponse("Invalid password"));
         }
 
-        // Add JWT...
+        // Create JWT token
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
         // Remove password from response
-        const { password: _, ...userWithoutPassword } = user;
-        res.status(200).json(successResponse("Login successful", { user: userWithoutPassword }));
+        const { passwordHash, ...userWithoutPassword } = user;
+        res.status(200).json(successResponse("Login successful", { user: userWithoutPassword, token }));
     } catch (err) {
         res.status(400).json(errorResponse("Failed to log in user", err.message));
     }
@@ -66,13 +67,15 @@ router.post('/login', async (req, res) => {
 // [POST] User Sign Up
 router.post('/signup', async (req, res) => {
     const { name, email, username, password } = req.body;
-    const hashedPassword = await hashPassword(password);
-
+    
     try {
+        const hashedPassword = await hashPassword(password);
+
         const newUser = await prisma.user.create({
             data: { name, email, username, passwordHash: hashedPassword }
         });
-        const { password, ...userWithoutPassword } = newUser; // Remove hashed password from response
+
+        const { passwordHash, ...userWithoutPassword } = newUser; // Remove hashed password from response
         res.status(201).json(successResponse("User created successfully", userWithoutPassword));
     } catch (err) {
         res.status(400).json(errorResponse("Failed to create user", err.message));
