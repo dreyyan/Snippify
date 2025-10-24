@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 // [IMPORT] Tools
 require('dotenv').config()
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 
 // [IMPORT] Express Router
 const express = require('express')
