@@ -14,32 +14,71 @@ interface Snippet {
     language: string;
     content: string;
 }
+
+interface Folder {
+    id: number;
+    name: string;
+    snippets: Snippet[];
+}
+
+interface User {
+    id: number;
+    name: string;
+    folders: Folder[];
+}
+
 const MySnippets = () => {
     document.title = "Snippify: My Snippets";
     
     // States
-    const [user, setUser] = useState(null);
+    const [folders, setFolders] = useState<Folder[]>();
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const tabs = [
+        {name: 'My Folders', iconUrl: 'my-folders-icon.svg'},
+        {name: 'Drafts', iconUrl: 'drafts-icon.svg'},
+        {name: 'Favorites', iconUrl: 'favorites-icon.svg'}
+    ];
 
     // [EFFECT] Retrieve user data from local storage
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        const fetchFolders = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("You are not logged in!");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:3000/api/folders", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    },
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    setFolders(data.data); // assuming backend sends { data: folders }
+                } else {
+                    console.error("Failed to fetch folders:", data.message);
+                }
+            } catch (err) {
+                console.error("Error fetching folders:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchFolders();
     }, []);
 
-    const tabs = [
-    { name: 'My Folders', iconUrl: 'my-folders-icon.svg' },
-    { name: 'Recents', iconUrl: 'recents-icon.svg' },
-    { name: 'Favorites', iconUrl: 'favorites-icon.svg' },
-    ];
+    if (loading) return <div>Loading...</div>;
     
     return (
         <div className="flex flex-col px-12 py-6">
             {/* Windows Tab */}
             <div className={Styles.tabsContainer}>
-                {tabs.map((tab, i) => (
+                {tabs && tabs.map((tab, i) => (
                     <button onClick={() => setPage(i + 1)} className={`${Styles.tabButton} ${page === i + 1 && 'bg-white'}`}><img src={`/${tab.iconUrl}`} className="size-4"/>{tab.name}</button>
                 ))}
             </div>

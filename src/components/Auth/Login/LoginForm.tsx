@@ -54,6 +54,7 @@ const SignUpForm = () => {
                 alert("Login successful!");
                 
                 // Save the user data to localStorage
+                localStorage.setItem("token", data.data.token);
                 localStorage.setItem("user", JSON.stringify(data.data.user));
 
                 // Navigate to Dashboard
