@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken';
-import { successResponse, errorResponse } from '../utils/response';
+const jwt = require('jsonwebtoken');
+const { successResponse, errorResponse } = require('../utils/response');
 require('dotenv').config()
 
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) return res.status(401).json(errorResponse("Missing token"));
@@ -17,3 +17,5 @@ export const verifyToken = (req, res, next) => {
         return res.status(403).json(errorResponse('Invalid or expired token'));
     }
 }
+
+module.exports = { verifyToken };
