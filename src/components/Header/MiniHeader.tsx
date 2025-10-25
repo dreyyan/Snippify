@@ -5,7 +5,7 @@ const MiniHeader = () => {
     return (
         <div className={Styles.headerContainer}>
             <Banner/>
-        </div>            
+        </div>
     );
 };
 

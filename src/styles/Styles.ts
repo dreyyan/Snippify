@@ -8,18 +8,25 @@ const Styles = {
     footerLink: "text-sm roboto-regular text-[#668896] transition-colors duration-300 hover:text-[#7ea2b1]",
     
     // Buttons
-    primaryButton: "text-sm font-bold w-full px-4 py-2 rounded-full text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[#018ec2] cursor-pointer",
+    primaryButton: "text-sm font-bold w-full px-4 py-2 rounded-full text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[oklch(55%_0.163_235.38)] cursor-pointer",
     primaryModalButton: "text-sm font-bold w-16 px-2 py-2 rounded-md text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[#018ec2] cursor-pointer",
     secondaryButton: "group text-[var(--text-secondary)] text-xs flex justify-center items-center gap-x-2 px-3 py-2 rounded-md cursor-pointer transition-colors duration-300 hover:text-[var(--text-primary)]",
     oAuthButton: "group border text-[var(--text-secondary)] border-[var(--secondary)] text-xs flex justify-center items-center gap-x-2 w-full px-3 py-2 rounded-md cursor-pointer transition-colors duration-300 hover:text-[var(--background)] hover:bg-[var(--secondary)] hover:border-[var(--secondary)] [&>p]:hover:text-[var(--background)]",
 
     // Form
+    authHeader: "bbh-sans-hegarty-light text-[var(--secondary)]",
+    authQuote: "text-[0.9rem] text-[var(--text-secondary)]",
     formInput: "border-1 border-[rgba(90,90,90,0.2)] shadow-sm rounded-sm text-sm mt-1 px-3 py-2 focus:outline-none focus:ring-0",
-    inputLabel: "text-[12px] font-semibold",
+    inputLabel: "text-[0.825rem] font-semibold",
     field: "flex flex-col relative",
+    visibilityIcon: "size-5 mt-1",
+
+    // Auth
+    signUpPanel: "flex justify-center w-full h-[100%] px-60 py-14 bg-[linear-gradient(to_bottom,var(--primary),var(--secondary))] overflow-hidden",
+    loginPanel: "w-1/2 px-20 pt-2 bg-[var(--background)]",
 
     // Text
-    textLink: "text-xs text-[var(--secondary)] underline underline-offset-2 transition-colors duration-300 hover:text-[var(--text-secondary)]",
+    textLink: "text-xs text-[var(--secondary)] transition-all duration-300 hover:text-[var(--text-secondary)] cursor-pointer",
 
     // My Snippets
     tabsContainer: "flex gap-x-2",

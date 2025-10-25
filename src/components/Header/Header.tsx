@@ -8,16 +8,18 @@ import AuthButtons from "./AuthButtons";
 const Header = () => {
     const [loggedIn, setLoggedIn] = useState(false);
 
+    const updateLoggedInState = () => {
+        const token = localStorage.getItem("token");
+        if (token) setLoggedIn(true);
+    };
+
     useEffect(() => {
-        const user = localStorage.getItem("user");
-        if (user) setLoggedIn(true);
-        else setLoggedIn(false);
+        updateLoggedInState();
     }, []);
 
     // [HANDLE] Logout
     const handleLogout = () => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token"); // if you're using JWT
+        localStorage.removeItem("token");
         setLoggedIn(false);
     };
 

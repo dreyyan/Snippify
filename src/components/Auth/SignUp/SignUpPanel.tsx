@@ -1,41 +1,57 @@
 import { Link } from "react-router-dom";
 import Styles from "../../../styles/Styles";
-import { useNavigate } from "react-router-dom";
 
 // [IMPORT] Components
 import SignUpForm from "./SignUpForm";
 import OAuthButton from "../OAuthButton";
+import Divider from "../Divider";
+import { useModal } from "../../../context/ModalContext";
 
 const SignUpPanel = () => {
-    const navigate = useNavigate();
-
-    const handleGoogleSignUp = () => {
-        
+    const { openModal } = useModal();
+    
+    // [HANDLE] OAuth Sign Up
+    const handleGitHubSignUp = () => {
+        openModal({
+            type: 'info',
+            title: 'Signing in...',
+            content: 'Please wait while we connect your GitHub account.',
+            size: 'sm'
+        });
     };
 
-    const handleGitHubSignUp = () => {
-
+    const handleGoogleSignUp = () => {
+        openModal({
+            type: 'info',
+            title: 'Signing in...',
+            content: 'Please wait while we connect your Google account.',
+            size: 'sm'
+        });
     };
 
     return (
-        <div className="">
+        <div className=" h-full shadow-lg rounded-xl px-8 pt-2 pb-6 bg-[var(--background)]">
             {/* Sign Up Form */}
-            <div className="mt-4">
+            <div className="flex justify-center mt-4">
                 <SignUpForm/>
             </div>
+
             {/* Divider */}
-            <div className="flex items-center my-4 space-x-2">
-                <div className="flex-grow border-t border-gray-300"></div>
-                <p className="text-[10px] text-[var(--text-secondary)]">OR</p>
-                <div className="flex-grow border-t border-gray-300"></div>
+            <div className="my-4">
+                <Divider/>
             </div>
+
             {/* OAuth Buttons */}
             <div className="space-y-2 mb-4">
-                <OAuthButton label="Sign Up with GitHub" iconUrl="github-icon.svg" onClick={handleGitHubSignUp}/>
-                <OAuthButton label="Sign Up with Google" iconUrl="google-icon.png" onClick={handleGoogleSignUp}/>
+                <OAuthButton type="signup" provider="GitHub" onClick={handleGitHubSignUp}/>
+                <OAuthButton type="signup" provider="Google" onClick={handleGoogleSignUp}/>
             </div>
+
             {/* Text Navigation Link */}
-            <span className="flex justify-center gap-x-1 text-xs"><p className="text-[var(--text-primary)]">Already have an account?</p><Link to="/login" className={Styles.textLink}>Log In</Link></span>
+            <div className="flex justify-center gap-x-1 text-xs">
+                <p className="text-[var(--text-primary)]">Already have an account?</p>
+                <Link to="/login" className={Styles.textLink}>Log In</Link>
+            </div>
         </div>
     );
 };

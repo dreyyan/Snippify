@@ -2,25 +2,25 @@
 
 :root {
     /* Color: Primary */
-    --primary: #00ABE7; /* buttons, highlights */
+    --primary: oklch(65.05% 0.163 235.38); /* #00ABE7 - bright cyan-blue for buttons, highlights */
 
     /* Color: Secondary */
-    --secondary: #0081af; /* links, secondary buttons */
+    --secondary: oklch(54.27% 0.108 237.77); /* #0081af - deeper blue for links, secondary buttons */
 
     /* Color: Background */
-    --background: #F6FAFB; /* Light, cool-toned background to match cyan/blue palette */
+    --background: oklch(96.83% 0.008 228.38); /* #F6FAFB - soft, cool light background */
 
     /* Color: Text */
-    --text-primary: #172026; /* Dark blue-gray for main text */
-    --text-secondary: #486672; /* Muted blue-gray for descriptions */
-    --text-on-primary: #FFFFFF; /* White for text on primary buttons */
+    --text-primary: oklch(23.02% 0.021 253.34); /* #172026 - dark blue-gray for main text */
+    --text-secondary: oklch(43.68% 0.042 240.27); /* #486672 - muted blue-gray for descriptions */
+    --text-on-primary: oklch(100% 0 0); /* #FFFFFF - white text on primary */
 
     /* Semantic Colors for Dialogs */
-    --dialog-alert: #FFB347; /* Muted orange for alert borders and icons */
-    --dialog-error: #E63946; /* Red for error borders and icons */
-    --dialog-info: var(--secondary); /* Reuse secondary for info dialogs */
-    --dialog-confirm: var(--primary); /* Reuse primary for confirm dialogs */
-    --dialog-prompt: var(--primary); /* Reuse primary for prompt dialogs */
+    --dialog-alert: oklch(78.65% 0.107 69.04); /* #FFB347 - muted orange for alerts */
+    --dialog-error: oklch(59.49% 0.188 23.75); /* #E63946 - strong red for errors */
+    --dialog-info: var(--secondary); /* reuse secondary */
+    --dialog-confirm: var(--primary); /* reuse primary */
+    --dialog-prompt: var(--primary); /* reuse primary */
 }
 
 /* ======== FONT PRESETS ======== */
@@ -77,37 +77,42 @@
 }
 
 /* ======== HEADINGS PRESETS (H1–H6) ======== */
-/* H1 — App Title / Page Headings */
+/* H1 — Branding / App Title */
 h1 {
   font-family: "BBH Sans Hegarty", sans-serif;
-  font-weight: 700;
-  font-size: 2.25rem;      /* ~36px */
-  line-height: 1.2;
+  font-weight: 400;            /* keep it elegant and less thick */
+  font-size: 2.75rem;          /* ~44px for branding */
+  line-height: 1.1;
+  letter-spacing: -0.02em;     /* slight tightening for branding */
 }
 
-/* H2 — Section Titles */
+/* H2 — Page Headings / Major Sections */
 h2 {
-  font-family: "BBH Sans Hegarty", sans-serif;
-  font-weight: 600;
-  font-size: 2rem;        /* ~32px */
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;            /* bold for visual hierarchy */
+  font-size: 1.825rem;             /* ~32px */
   line-height: 1.3;
+  color: var(--text-primary);
   margin-bottom: 0.6rem;
 }
 
 /* H3 — Subsection Headings */
 h3 {
-  font-family: "BBH Sans Hegarty", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 600;
-  font-size: 1.5rem;      /* ~24px */
+  font-size: 1.5rem;           /* ~24px */
   line-height: 1.4;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
 }
 
 /* H4 — Smaller Section Labels */
 h4 {
-  font-family: "BBH Sans Hegarty", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-size: 1.25rem;     /* ~20px */
+  font-size: 1.25rem;          /* ~20px */
   line-height: 1.4;
+  color: var(--text-secondary);
   margin-bottom: 0.4rem;
 }
 
@@ -115,8 +120,9 @@ h4 {
 h5 {
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-size: 1.1rem;      /* ~18px */
+  font-size: 1.1rem;           /* ~18px */
   line-height: 1.5;
+  color: var(--text-secondary);
   margin-bottom: 0.3rem;
 }
 
@@ -124,9 +130,10 @@ h5 {
 h6 {
   font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-size: 0.95rem;     /* ~15px */
+  font-size: 0.95rem;          /* ~15px */
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  color: var(--text-secondary);
   margin-bottom: 0.25rem;
 }
 
@@ -141,6 +148,7 @@ body {
   min-height: 100%;
   margin: 0;
 
+  font-size: 16px;
   font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;

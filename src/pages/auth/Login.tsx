@@ -1,3 +1,5 @@
+import Styles from "../../styles/Styles";
+
 // [IMPORT] Components
 import LoginPanel from "../../components/Auth/Login/LoginPanel";
 import SlideshowPanel from "../../components/Auth/SlideshowPanel";
@@ -8,9 +10,10 @@ const Login = () => {
     return (
         <div className="flex flex-1">
             {/* Login Panel */}
-            <div className="w-1/2 px-20 pt-2 bg-[var(--background)]">
+            <div className={Styles.loginPanel}>
                 <LoginPanel/>
             </div>
+            
             {/* Feature Slideshow */}
             <div className="w-1/2 bg-[linear-gradient(to_bottom,var(--primary),var(--secondary))] overflow-hidden">
                 <SlideshowPanel/>

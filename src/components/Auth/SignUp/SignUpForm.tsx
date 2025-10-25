@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Styles from "../../../styles/Styles";
 import { useNavigate } from "react-router-dom";
+import Styles from "../../../styles/Styles";
 
 const SignUpForm = () => {
     const navigate = useNavigate();
@@ -17,15 +17,21 @@ const SignUpForm = () => {
         // password: "",
         // confirmPassword: ""
     });
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    // [HANDLE] Show/hide password
+    const handleTogglePassword = () => { setShowPassword(prev => !prev); };
+    const handleToggleConfirmPassword = () => { setShowConfirmPassword(prev => !prev); };
 
     // [HANDLE] Input field changes
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
     // [HANDLE] Process & validate form before registering account
-    const handleSignUp = async (e) => {
+    const handleSignUp = async (e: { preventDefault: () => void; }) => {
         e.preventDefault(); // Prevent page reload
 
         const { name, email, username, password, confirmPassword } = formData;
@@ -78,10 +84,17 @@ const SignUpForm = () => {
     };
 
     return (
-        <form className="flex flex-col">
-            <p className="text-3xl font-bold mb-4">Sign Up</p>
-            <div className="space-y-2 mb-6">
-                <div className={Styles.field}>
+        <form className="flex flex-col w-full ">
+            {/* Header */}
+            <div className="flex flex-col justify-center items-center mb-8">
+                <h2 className={Styles.authHeader}>Sign Up</h2>
+                <i className={Styles.authQuote}>"Become a part of our growing community."</i>
+            </div>
+
+            {/* Sign Up Form */}
+            <div className="grid grid-cols-2 space-y-2 mb-6 gap-x-6">
+                {/* [INPUT] Full Name */}
+                <div className={`${Styles.field} col-span-2`}>
                     <label className={Styles.inputLabel}>Full Name</label>
                     <input
                     type="text"
@@ -92,6 +105,7 @@ const SignUpForm = () => {
                     required className={Styles.formInput}/>
                 </div>
 
+                {/* [INPUT] Email */}
                 <div className={Styles.field}>
                     <label className={Styles.inputLabel}>Email</label>
                     <input
@@ -102,6 +116,8 @@ const SignUpForm = () => {
                     onChange={handleInputChange}
                     required className={Styles.formInput}/>
                 </div>
+
+                {/* [INPUT] Username */}
                 <div className={Styles.field}>
                     <label className={Styles.inputLabel}>Username</label>
                     <input
@@ -112,27 +128,42 @@ const SignUpForm = () => {
                     onChange={handleInputChange}
                     required className={Styles.formInput}/>
                 </div>
+
+                {/* [INPUT] Password */}
                 <div className={Styles.field}>
                     <label className={Styles.inputLabel}>Password</label>
                     <input
-                    type="password"
+                    type={`${showPassword ? 'password' : 'text'}`}
                     name="password"
                     placeholder="********"
                     value={formData.password}
                     onChange={handleInputChange}
                     required className={Styles.formInput}/>
+
+                    {/* [BUTTON] Toggle Password */}
+                    <button type="button" onClick={handleTogglePassword} className="cursor-pointer absolute right-3 top-10 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--primary)]">
+                        <img src={`${showPassword === true ? 'show-password' : 'hide-password'}-icon.svg`} className={Styles.visibilityIcon}/>
+                    </button>
                 </div>
+
+                {/* [INPUT] Confirm Password */}
                 <div className={Styles.field}>
                     <label className={Styles.inputLabel}>Confirm Password</label>
                     <input
-                    type="password"
+                    type={`${showConfirmPassword ? 'password' : 'text'}`}
                     name="confirmPassword"
                     placeholder="********"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
                     required className={Styles.formInput}/>
+
+                    {/* [BUTTON] Toggle Password */}
+                    <button type="button" onClick={handleToggleConfirmPassword} className="cursor-pointer absolute right-3 top-10 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--primary)]">
+                        <img src={`${showConfirmPassword === true ? 'show-password' : 'hide-password'}-icon.svg`} className={Styles.visibilityIcon}/>
+                    </button>
                 </div>                                                
             </div>
+
             {/* Sign Up Button */}
             <button onClick={handleSignUp} className={Styles.primaryButton}>Sign Up</button>
         </form>

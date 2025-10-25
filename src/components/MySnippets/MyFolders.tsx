@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Styles from "../../styles/Styles";
 import SnippetItem from "./SnippetItem";
 import FolderItem from "./FolderItem";
 import { fetchUserData, getToken } from "../../utils/auth";
 import { useModal } from "../../context/ModalContext";
-import type { Folder, Snippet, SnippetData } from "../../utils/types";
+import type { Folder, Snippet } from "../../utils/types";
 import NewSnippetForm from "./NewSnippetForm";
 
 const MyFolders = () => {

@@ -29,7 +29,7 @@ const hashPassword = async (password) => {
 // =================================================================
 // [POST] User Login
 router.post('/login', async (req, res) => {
-    const { usernameEmail, password } = req.body;
+    const { usernameEmail, password, rememberMe } = req.body;
 
     try {
         const user = await prisma.user.findFirst({
@@ -54,8 +54,11 @@ router.post('/login', async (req, res) => {
             return res.status(401).json(errorResponse("Invalid password"));
         }
 
+        // Remember me
+        const expiresIn = rememberMe ? "7d" : "1h";
+
         // Create JWT token
-        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+        const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: expiresIn });
 
         // Remove password from response
         const { passwordHash, ...userWithoutPassword } = user;

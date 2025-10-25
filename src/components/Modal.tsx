@@ -16,12 +16,12 @@ type PromptModalProps = BaseModalProps & {
   onConfirm: () => void;
 };
 
-type OtherModalProps = BaseModalProps & {
-  type?: Exclude<'prompt', 'alert' | 'info' | 'confirm' | 'error'>;
+type InfoModalProps = BaseModalProps & {
+  type: 'info' | 'alert' | 'confirm' | 'error';
   onConfirm?: never;
 };
 
-type ModalProps = PromptModalProps | OtherModalProps;
+type ModalProps = PromptModalProps | InfoModalProps;
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, type, onConfirm, title, content, children, size, className }) => {
     const modalRef = useRef<HTMLDivElement | null>(null);
@@ -57,12 +57,25 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, type, onConfirm, title, 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div ref={modalRef} className={`border-2 border-[rgba(23,32,38,0.1)] bg-[var(--background)] rounded-lg shadow-md space-y-4 p-6 ${size === 'sm' ? 'w-64' : size === 'lg' ? 'w-128' : 'w-96'} ${className}`}>
-                <span className="flex items-center gap-x-1 mb-2"><img src={`${type}-icon.svg`} className="size-8"/>{title && <p className="text-xl font-bold">{title}</p>}</span>
+            <div ref={modalRef} className={`border-2 border-[rgba(23,32,38,0.1)] bg-[var(--background)] rounded-lg shadow-md space-y-4 p-6 ${size === 'sm' ? 'w-70' : size === 'lg' ? 'w-128' : 'w-96'} ${className}`}>
+                {/* Header */}
+                <span className="flex justify-between items-center gap-x-2 mb-3">
+                    <div className="flex gap-x-2">
+                        <img src={`${type}-icon.svg`} className="size-7"/>
+                        {title && <p className="text-xl font-bold">{title}</p>}
+                    </div>
+                    {type === 'info' &&
+                    <button onClick={onClose} className="text-gray-500 hover:text-black">
+                        <img src="/close-icon.svg" className="size-6 cursor-pointer"/>
+                    </button>
+                    }
+                </span>
+
+                {/* Children Props */}
                 {children ? <div>{children}</div> : <p className="text-sm mb-4">{content}</p>}
                 
                 {/* Buttons */}
-                {type !== 'prompt' &&
+                {type === 'prompt' &&
                 <div className="flex justify-end gap-x-4">
                     <button onClick={onClose} className={Styles.secondaryButton}>Close</button>
                     <button onClick={onConfirm} className={Styles.primaryModalButton}>Create</button>
