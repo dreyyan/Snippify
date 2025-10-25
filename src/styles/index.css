@@ -156,22 +156,6 @@ body {
   height: 100vh;                /* full viewport height */
 }
 
-.hero-gradient {
-  height: 100vh; /* full screen */
-  background: 
-    linear-gradient(
-      145deg,
-      #F6FAFB,
-      #D8F1F9,
-      #B9E7F6,
-      #9ADDF4,
-      #7BD3F1,
-      #00ABE7,
-      #0081AF
-    ),
-    var(--background); /* base layer using your background color (#F6FAFB) for a clean, light foundation */
-}
-
 /* HIDE SCROLLBAR */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;

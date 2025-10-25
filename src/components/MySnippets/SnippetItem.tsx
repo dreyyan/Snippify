@@ -1,4 +1,6 @@
+import { useState } from "react";
 import Styles from "../../styles/Styles";
+import { useFileWindow } from "../../context/FileWindowContext";
 
 interface SnippetItemProps {
     fileData: {
@@ -10,11 +12,26 @@ interface SnippetItemProps {
 };
 
 const SnippetItem: React.FC<SnippetItemProps> = ({ fileData }) => {
+    const { openFileWindow } = useFileWindow();
     const { title, language, content, updatedAt } = fileData;
     const dateModified = new Date(updatedAt);
 
+    // States
+    const [isOpen, setIsOpen] = useState(false);
+
+    // [HANDLE] Open the a window for the snippet file
+    const handleOpenSnippetFile = () => {
+        openFileWindow({
+        title: fileData.title,
+        language: fileData.language,
+        content: fileData.content,
+        updatedAt: new Date(fileData.updatedAt),
+        })
+    };
+
     return (
-        <button className={Styles.snippetItem}>
+        <button onClick={ () => handleOpenSnippetFile()}
+        className={Styles.snippetItem}>
             <p className="font-semibold">{title}</p>
             <p>{language}</p>
             <p>{dateModified.toDateString()}</p>

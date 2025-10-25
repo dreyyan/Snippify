@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import MyFolders from "../components/MySnippets/MyFolders";
 import Drafts from "../components/MySnippets/Recents";
 import Favorites from "../components/MySnippets/Favorites";
+import { useNavigate } from "react-router-dom";
 
 interface Snippet {
     id: number;
@@ -29,6 +30,8 @@ interface User {
 
 const MySnippets = () => {
     document.title = "Snippify: My Snippets";
+
+    const navigate = useNavigate();
     
     // States
     const [folders, setFolders] = useState<Folder[]>();
@@ -46,6 +49,7 @@ const MySnippets = () => {
             const token = localStorage.getItem("token");
             if (!token) {
                 alert("You are not logged in!");
+                navigate('/login');
                 return;
             }
 

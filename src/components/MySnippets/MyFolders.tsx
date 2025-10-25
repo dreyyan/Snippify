@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Styles from "../../styles/Styles";
-import SnippetFile from "./SnippetItem";
+import SnippetItem from "./SnippetItem";
 import FolderItem from "./FolderItem";
 import { fetchUserData, getToken } from "../../utils/auth";
 import { useModal } from "../../context/ModalContext";
@@ -12,11 +12,11 @@ const MyFolders = () => {
 	const [selectedSnippet, setSelectedSnippet] = useState(1);
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [snippets, setSnippets] = useState<Snippet[]>([]);
-	const [snippetData, setSnippetData] = useState<SnippetData>({
-    title: '',
-    language: '',
-    content: ''
-	});
+	// const [snippetData, setSnippetData] = useState<SnippetData>({
+    // title: '',
+    // language: '',
+    // content: ''
+	// });
 	const [menu, setMenu] = useState<{ 
 		visible: boolean;
 		x: number;
@@ -176,7 +176,7 @@ const MyFolders = () => {
 	return (
 	<div className={Styles.container}>
 		<div className="col-span-2  border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[var(--secondary)]">
-			{/* Folders */}
+			{/* Navigation Pane - Folder (Tree View) */}
 			{folders.map((folder, index) => (
 				<button
 				onClick={() => setSelectedSnippet(index + 1)}
@@ -185,28 +185,28 @@ const MyFolders = () => {
 			))}
 		</div>
 
-		{/* File Explorer */}
+		{/* Files & Folders */}
 		<div
 		onClick={handleOutsideClick}
 		onContextMenu={handleEmptyAreaContextMenu}
 		className="border border-l-0 border-[rgba(90,90,90,0.2)] col-span-5 shadow-md bg-white flex flex-col items-center min-h-100">
-			{/* Header */}
+			{/* Details Header */}
 			<span className="w-full flex justify-between px-4 py-2 [&>p]:text-xs">
 				<p>Name</p>
 				<p>Language</p>
 				<p>Date Modified</p>
 			</span>
 
-				{/* Snippets */}
+				{/* Snippet Files */}
 				<div className="w-full h-full">
 					{snippets.map((snippet, index) => (
 						<div
 							key={snippet.id}
 							onClick={() => setSelectedSnippet(index + 1)}
-							className={Styles.folderItem}
+							className=""
 							onContextMenu={(e) => handleSnippetFileContextMenu(e, snippet.title)}
 						>
-							<SnippetFile fileData={snippet} />
+							<SnippetItem fileData={snippet} />
 						</div>
 					))}
 				</div>
