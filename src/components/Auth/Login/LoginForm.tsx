@@ -69,6 +69,7 @@ const SignUpForm = () => {
                 
                 // Save user data to local storage
                 localStorage.setItem("token", data.data.token);
+                localStorage.setItem("user", JSON.stringify(data.data));
 
                 // Navigate to dashboard
                 navigate('/dashboard');

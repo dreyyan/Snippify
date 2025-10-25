@@ -30,7 +30,7 @@ const SignUpPanel = () => {
     };
 
     return (
-        <div className=" h-full shadow-lg rounded-xl px-8 pt-2 pb-6 bg-[var(--background)]">
+        <div className="shadow-xl rounded-xl px-8 py-5 pb-6 border-4 border-[var(--primary)] bg-[var(--background)]">
             {/* Sign Up Form */}
             <div className="flex justify-center mt-4">
                 <SignUpForm/>

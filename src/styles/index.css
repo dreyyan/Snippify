@@ -1,21 +1,12 @@
 @import "tailwindcss";
 
 :root {
-    /* Color: Primary */
     --primary: oklch(65.05% 0.163 235.38); /* #00ABE7 - bright cyan-blue for buttons, highlights */
-
-    /* Color: Secondary */
     --secondary: oklch(54.27% 0.108 237.77); /* #0081af - deeper blue for links, secondary buttons */
-
-    /* Color: Background */
     --background: oklch(96.83% 0.008 228.38); /* #F6FAFB - soft, cool light background */
-
-    /* Color: Text */
     --text-primary: oklch(23.02% 0.021 253.34); /* #172026 - dark blue-gray for main text */
     --text-secondary: oklch(43.68% 0.042 240.27); /* #486672 - muted blue-gray for descriptions */
     --text-on-primary: oklch(100% 0 0); /* #FFFFFF - white text on primary */
-
-    /* Semantic Colors for Dialogs */
     --dialog-alert: oklch(78.65% 0.107 69.04); /* #FFB347 - muted orange for alerts */
     --dialog-error: oklch(59.49% 0.188 23.75); /* #E63946 - strong red for errors */
     --dialog-info: var(--secondary); /* reuse secondary */

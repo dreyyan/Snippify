@@ -11,6 +11,7 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ iconUrl, title, description }
             <div className="flex justify-center items-center w-12 h-12 rounded-full bg-[var(--primary)] z-1">
                 <img src={`/${iconUrl}`} className="w-10 rounded-full p-1 bg-[#FFFFFF]"/>
             </div>
+            
             {/* Feature Title & Description */}
             <div className="max-w-xs text-center border-1 border-gray-100 rounded-md -m-6 px-6 pb-5 pt-7 shadow-md bg-[#FFFFFF]">
                 <p className="text-lg leading-loose roboto-bold text-[var(--text-primary)]">{title}</p>

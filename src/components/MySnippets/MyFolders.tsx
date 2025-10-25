@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Styles from "../../styles/Styles";
 import SnippetItem from "./SnippetItem";
-import FolderItem from "./FolderItem";
-import { fetchUserData, getToken } from "../../utils/auth";
+// import FolderItem from "./FolderItem";
+import { getUserFoldersAndSnippets, getToken } from "../../utils/auth";
 import { useModal } from "../../context/ModalContext";
 import type { Folder, Snippet } from "../../utils/types";
 import NewSnippetForm from "./NewSnippetForm";
@@ -34,7 +34,7 @@ const MyFolders = () => {
 	// [EFFECT] Fetch user data on mount (user folders and snippets)
 	useEffect(() => {
 		const fetchData = async () => {
-			const data = await fetchUserData();
+			const data = await getUserFoldersAndSnippets();
 
 			// If data exists, update folders and snippets states
 			if (data) {

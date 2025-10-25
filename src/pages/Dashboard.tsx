@@ -1,29 +1,38 @@
 // [IMPORT] Styles
 import "../styles/index.css";
-import Styles from "./../styles/Styles";
 
 // [IMPORT] Components
 import { useEffect, useState } from "react";
+import { fetchUserData } from "../utils/auth";
+import type { User} from "../utils/types";
 
-interface User {
-    name: string;
-    email: string;
-    username: string;
-    password: string;
-    confirmPassword: string;
-}
 const Dashboard = () => {
     document.title = "Snippify: Dashboard";
     
     const [user, setUser] = useState<User|null>(null);
 
-    // [EFFECT] Retrieve user data from local storage
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
-    }, []);
+	// [EFFECT] Fetch user data on mount (user info)
+	useEffect(() => {
+		const fetchData = async () => {
+            const user = localStorage.getItem("user");
+            // [ERROR] Missing user
+            if (!user) return;
+
+            // Get user ID from data
+            const userId = JSON.parse(user).id;
+
+            // Fetch actual user data
+			const data = await fetchUserData(userId);
+
+            console.log(data);
+			// If data exists, update folders and snippets states
+			if (data) {
+				setUser(data);
+			}
+		};
+
+		fetchData();
+	}, []);
 
     return (
         <div className="px-12 py-6">

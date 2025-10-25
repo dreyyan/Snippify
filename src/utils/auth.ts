@@ -1,23 +1,43 @@
+import type { User } from "./types";
+
 // [FUNCTION] Get user token for user authentication
 const getToken = (): string => {
     const token = localStorage.getItem("token");
 
-    // ERROR: Missing token
+    // [ERROR] Missing token
     if (!token) {
         throw new Error("No token found. User must login first.");
     } return token;
 };
 
-// [FUNCTION] Fetch data from backend
-const fetchUserData = async () => {
+// [FUNCTION] Fetch user data from backend
+const fetchUserData = async (userId: number): Promise<User | undefined> => {
     try {
         const token = getToken();
 
-        // ERROR: Unauthorized user
-        if (!token) {
-            console.error("No token found, user must login first.");
-            return;
+        // Get user's folders and snippets data
+        const response = await fetch(`http://localhost:3000/api/users/${userId}`, {
+            headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
+        })
+
+        const data = await response.json();
+
+        // [ERROR] Error folders or snippets response
+        if (!response.ok) {
+            throw new Error("Failed to fetch user data");
         }
+
+        return data.data as User;
+    }  catch (err) {
+        console.error("Error fetching data:", err);
+        alert("An error occured while trying to fetch user data.");
+    }
+};
+
+// [FUNCTION] Fetch user folders and snippets from backend
+const getUserFoldersAndSnippets = async () => {
+    try {
+        const token = getToken();
 
         // Get user's folders and snippets data
         const [foldersResponse, snippetsResponse] = await Promise.all([
@@ -32,7 +52,7 @@ const fetchUserData = async () => {
         const foldersData = await foldersResponse.json();
         const snippetsData = await snippetsResponse.json();
 
-        // ERROR: Error folders or snippets response
+        // [ERROR] Error folders or snippets response
         if (!foldersResponse.ok || !snippetsResponse.ok) {
             throw new Error("Failed to fetch user data");
         }
@@ -44,4 +64,4 @@ const fetchUserData = async () => {
     }
 };
 
-export { getToken, fetchUserData };
+export { getToken, fetchUserData, getUserFoldersAndSnippets };

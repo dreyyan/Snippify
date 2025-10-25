@@ -1,6 +1,6 @@
 const Styles = {
     // Header
-    headerContainer: "flex justify-between items-center px-6 py-4 sticky top-0 z-10",
+    headerContainer: "flex justify-between items-center shadow-md px-6 py-4 sticky top-0 z-10",
     headerLink: "text-sm roboto-medium text-[var(--text-primary)] relative transition ease-out before:content-[''] before:absolute before:left-1/2 before:bottom-[-2px] before:-translate-x-1/2 before:w-0 before:h-[2px] before:bg-[var(--text-primary)]/80 before:transition-all before:duration-300 hover:before:w-full",
 
     // Footer
@@ -22,7 +22,7 @@ const Styles = {
     visibilityIcon: "size-5 mt-1",
 
     // Auth
-    signUpPanel: "flex justify-center w-full h-[100%] px-60 py-14 bg-[linear-gradient(to_bottom,var(--primary),var(--secondary))] overflow-hidden",
+    signUpPanel: "flex flex-1 justify-center items-center w-full px-60 bg-[linear-gradient(to_bottom,var(--primary),var(--secondary))] overflow-hidden",
     loginPanel: "w-1/2 px-20 pt-2 bg-[var(--background)]",
 
     // Text

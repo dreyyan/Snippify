@@ -84,7 +84,7 @@ const SignUpForm = () => {
     };
 
     return (
-        <form className="flex flex-col w-full ">
+        <form className="flex flex-col gap-y-4 w-full">
             {/* Header */}
             <div className="flex flex-col justify-center items-center mb-8">
                 <h2 className={Styles.authHeader}>Sign Up</h2>
@@ -92,7 +92,7 @@ const SignUpForm = () => {
             </div>
 
             {/* Sign Up Form */}
-            <div className="grid grid-cols-2 space-y-2 mb-6 gap-x-6">
+            <div className="grid grid-cols-2 space-y-2 gap-x-6">
                 {/* [INPUT] Full Name */}
                 <div className={`${Styles.field} col-span-2`}>
                     <label className={Styles.inputLabel}>Full Name</label>
