@@ -7,6 +7,7 @@ import { useModal } from "../../context/ModalContext";
 import type { Folder, Snippet } from "../../utils/types";
 import NewSnippetForm from "./NewSnippetForm";
 import FolderItem from "./FolderItem";
+import NewFolderForm from "./NewFolderForm";
 
 const MyFolders = () => {
 	// States
@@ -71,8 +72,15 @@ const MyFolders = () => {
 
 	// [HANDLE: Add Snippet] Send a request to create a new snippet for the current user and update the local state
 	const handleAddSnippet = async (snippetData: Omit<Snippet, 'id' | 'updatedAt'>) => {
-		const folderId = folders[selectedFolder - 1]?.id;
+		const folderId = selectedFolder;
 
+		// [ERROR] Missing folder ID
+		if (!folderId) {
+			console.error("No folder selected!");
+			alert("Please select a folder first.");
+			return;
+		}
+  
 		try {
 			const token = getToken();
 			const response = await fetch(`http://localhost:3000/api/folders/${folderId}`, {
@@ -138,7 +146,15 @@ const MyFolders = () => {
 			// If successful request, update folders state 
 			if (response.ok) {
 				console.info(`Folder "${name}" added successfully.`);
-				alert("Folder created!");
+				
+				// Display modal
+				openModal({
+					type: 'info',
+					title: 'Folder Created',
+					size: 'md',
+					content: "Your new folder has been successfully added."
+				});
+
 				setFolders(prev => [...prev, data.data]);
 			} else {
 				console.error("Failed to add folder:", data.message);
@@ -151,43 +167,146 @@ const MyFolders = () => {
 	};
 
 	// [HANDLE: Rename Folder] Send a request to rename the user's selected folder and update the local state
-	const handleRenameFolder = () => {
-		
+	const handleRenameFolder = async (folderName: string) => {
+		// try {
+		// 	const token = getToken();
+		// 	const response = await fetch('http://localhost:3000/api/folders', {
+		// 		method: "PATCH",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 			"Authorization": `Bearer ${token}`,
+		// 		},
+		// 		body: JSON.stringify({ name }),
+		// 	});
+
+		// 	const data = await response.json();
+
+		// 	// If successful request, update folders state 
+		// 	if (response.ok) {
+		// 		console.info(`Folder "${name}" added successfully.`);
+		// 		alert("Folder created!");
+		// 		setFolders(prev => [...prev, data.data]);
+		// 	} else {
+		// 		console.error("Failed to add folder:", data.message);
+		// 		alert(data.message || "Failed to add folder.");
+		// 	}
+		// } catch (err) {
+		// 	console.error("Error adding folder:", err);
+		// 	alert("An error occurred while adding folder.");
+		// }	
 	};
 
 	// [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
-	const handleDeleteFolder = () => {
-		
+	const handleDeleteFolder = async (folderName: string) => {
+		try {
+			const token = getToken();
+			const response = await fetch('http://localhost:3000/api/folders', {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`,
+				},
+				body: JSON.stringify({ folderName }),
+			});
+
+			const data = await response.json();
+
+			// If successful request, update folders state 
+			if (response.ok) {
+				console.info(`Folder "${folderName}" deleted successfully.`);
+
+				// Display modal
+				openModal({
+					type: 'info',
+					title: 'Folder Deleted',
+					size: 'md',
+					content: "Your folder has been successfully deleted."
+				});
+
+				setFolders(prev => prev.filter(folder => folder.name !== folderName));
+			} else {
+				console.error("Failed to delete folder:", data.message);
+				alert(data.message || "Failed to delete folder.");
+			}
+		} catch (err) {
+			console.error("Error deleting folder:", err);
+			alert("An error occurred while deleting folder.");
+		}	
 	};
 
 	// ============================== Modal Display Implementation ==============================
 	const handleShowNewSnippetModal = () => {
-	openModal({
-		type: 'prompt',
-		title: 'Create Snippet',
-		size: 'lg',
-		children: (
-		<NewSnippetForm
-			onSubmit={data => {
-				handleAddSnippet(data); // Directly call handleAddSnippet with form data
-                closeModal(); // Close the modal after submission
-			}}
-		/>
-		)
-	});
+		openModal({
+			type: 'prompt',
+			title: 'Create Snippet',
+			size: 'lg',
+			children: (
+			<NewSnippetForm
+				onSubmit={data => {
+					handleAddSnippet(data);
+					closeModal();
+				}}
+				handleCloseModal={closeModal}
+			/>
+			)
+		});
+	};
+
+	const handleShowNewFolderModal = () => {
+		openModal({
+			type: 'prompt',
+			title: 'Create Folder',
+			size: 'sm',
+			children: (
+			<NewFolderForm
+				onSubmit={name => {
+					handleAddFolder(name);
+					closeModal();
+				}}
+				handleCloseModal={closeModal}
+			/>
+			)
+		});
 	};
 
 	return (
 	<div className={Styles.container}>
-		<div className="col-span-2  border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[var(--secondary)]">
 			{/* Navigation Pane - Folder (Tree View) */}
-			{folders.map((folder, index) => (
-				<button
-				onClick={() => { setSelectedFolder(index + 1); console.log(`Selected Folder: ${index + 1}`) }}
-				onContextMenu={(e) => handleFolderContextMenu(e, folder.name)}
-				className={`${Styles.folderShortcut} ${index === selectedFolder - 1 && 'shadow-sm bg-white text-[var(--primary)]'}`}>{folder.name}</button>
-			))}
-		</div>
+			{folders && folders.length > 0 ?
+			(
+				<div className="col-span-2 border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[var(--secondary)]">
+				{folders.map((folder, index) => (
+					<div
+					key={index}
+					onClick={() => {
+						setSelectedFolder(folder.id);
+						console.log(`Selected Folder: ${folder.id}`);
+					}}
+					onContextMenu={(e) => handleFolderContextMenu(e, folder.name)}
+					className={`${Styles.folderShortcut} flex justify-between items-center ${
+						folder.id === selectedFolder ? 'shadow-sm bg-white text-[var(--primary)]' : ''
+					}`}
+					>
+					<span>{folder.name}</span>
+					<button
+						onClick={(e) => {
+						e.stopPropagation();
+						handleDeleteFolder(folder.name);
+						}}
+						className="cursor-pointer hover:opacity-70 transition"
+					>
+						{folder.id === selectedFolder &&
+							<img src="/delete-folder-icon.svg" className="size-4" alt="Delete folder" />
+						}
+					</button>
+					</div>
+				))}
+				</div>
+			) : (
+				<div className="col-span-2 flex flex-col justify-center items-center shadow-md text-sm text-[var(--background)] border-[rgba(131,131,131,0.2)] bg-[var(--secondary)]">
+					<p>You have no folders yet.</p>
+				</div>
+			)}
 
 		{/* Files & Folders */}
 		<div
@@ -204,7 +323,7 @@ const MyFolders = () => {
 				{/* Folders & Snippet Files */}
 				<div className="w-full h-full">
 					{snippets
-					.filter(snippet => snippet.folderId === folders[selectedFolder - 1]?.id)
+					.filter(snippet => snippet.folderId === selectedFolder)
 					.map((snippet, index) => (
 						<div
 						key={snippet.id}
@@ -242,7 +361,7 @@ const MyFolders = () => {
 								<button onClick={handleShowNewSnippetModal} className={Styles.snippetFileButton}>
 									New Snippet
 								</button>
-								<button onClick={() => handleAddFolder("New Folder")} className={Styles.snippetFileButton}>
+								<button onClick={handleShowNewFolderModal} className={Styles.snippetFileButton}>
 									New Folder
 								</button>
 							</>

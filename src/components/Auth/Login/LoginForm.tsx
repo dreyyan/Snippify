@@ -73,6 +73,9 @@ const SignUpForm = () => {
                 localStorage.setItem("token", data.data.token);
                 localStorage.setItem("user", JSON.stringify(data.data.user));
 
+                // [DEBUG] Display token
+                console.info(`Token: ${data.data.token}`);
+
                 // Navigate to dashboard
                 navigate('/dashboard');
             } else {

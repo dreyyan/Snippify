@@ -2,7 +2,7 @@ import { useState } from "react";
 import Styles from "../../styles/Styles";;
 import type { SnippetData } from "../../utils/types";
 
-const NewSnippetForm: React.FC<{ onSubmit: (data: SnippetData) => void }> = ({ onSubmit }) => {
+const NewSnippetForm: React.FC<{ onSubmit: (data: SnippetData) => void, handleCloseModal: () => void }> = ({ onSubmit, handleCloseModal }) => {
     const [data, setData] = useState<SnippetData>({
 		title: "",
 		language: "",
@@ -45,7 +45,7 @@ const NewSnippetForm: React.FC<{ onSubmit: (data: SnippetData) => void }> = ({ o
         className={Styles.formInput}
         />
         <div className="flex justify-end gap-x-4">
-            <button type="button" className={Styles.secondaryButton}>Close</button>
+            <button type="button" onClick={handleCloseModal} className={Styles.secondaryButton}>Close</button>
             <button type="submit" className={Styles.primaryModalButton}>Create</button>
         </div>
     </form>

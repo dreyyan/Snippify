@@ -2,8 +2,8 @@ import { useRef, useEffect } from "react";
 import Styles from "../styles/Styles";
 
 type BaseModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: (() => void) | null;
   title?: string;
   content?: string;
   children?: React.ReactNode;
@@ -13,7 +13,7 @@ type BaseModalProps = {
 
 type PromptModalProps = BaseModalProps & {
   type: 'prompt';
-  onConfirm: () => void;
+  onConfirm?: () => void;
 };
 
 type InfoModalProps = BaseModalProps & {
@@ -23,14 +23,14 @@ type InfoModalProps = BaseModalProps & {
 
 type ModalProps = PromptModalProps | InfoModalProps;
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, type, onConfirm, title, content, children, size, className }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen = true, onClose, type, onConfirm, title, content, children, size, className }) => {
     const modalRef = useRef<HTMLDivElement | null>(null);
 
     // [EFFECT: Close Modal] When user clicks outside the modal 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-                onClose();
+                onClose?.();
             }
         }
 
@@ -46,7 +46,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, type, onConfirm, title, 
     // [EFFECT: Close Modal] When user presses 'escape' key
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onClose();
+        if (e.key === "Escape") onClose?.();
         };
         if (isOpen) document.addEventListener("keydown", handleEsc);
         return () => document.removeEventListener("keydown", handleEsc);
@@ -65,7 +65,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, type, onConfirm, title, 
                         {title && <p className="text-xl font-bold">{title}</p>}
                     </div>
                     {type === 'info' &&
-                    <button onClick={onClose} className="text-gray-500 hover:text-black">
+                    <button onClick={onClose!} className="text-gray-500 hover:text-black">
                         <img src="/close-icon.svg" className="size-6 cursor-pointer"/>
                     </button>
                     }
@@ -75,15 +75,10 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, type, onConfirm, title, 
                 {children ? <div>{children}</div> : <p className="text-sm mb-4">{content}</p>}
                 
                 {/* Buttons */}
-                {type === 'prompt' &&
-                <div className="flex justify-end gap-x-4">
-                    <button onClick={onClose} className={Styles.secondaryButton}>Close</button>
-                    <button onClick={onConfirm} className={Styles.primaryModalButton}>Create</button>
-                </div>
-                }
             </div>
         </div>
     );
 };
 
 export default Modal;
+export type { ModalProps };

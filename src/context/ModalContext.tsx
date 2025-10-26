@@ -1,17 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, type ReactNode } from "react";
 import Modal from "../components/Modal";
-
-interface ModalProps {
-  type?: 'alert' | 'info' | 'confirm' | 'error' | 'prompt';
-  title?: string;
-  content?: string;
-  children?: ReactNode;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-  onConfirm?: () => void;
-  onCancel?: () => void;
-}
+import type { ModalProps } from "../components/Modal";
 
 interface ModalContextType {
   openModal: (props: ModalProps) => void;
