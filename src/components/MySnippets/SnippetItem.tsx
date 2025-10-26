@@ -13,11 +13,8 @@ interface SnippetItemProps {
 
 const SnippetItem: React.FC<SnippetItemProps> = ({ fileData }) => {
     const { openFileWindow } = useFileWindow();
-    const { title, language, content, updatedAt } = fileData;
+    const { title, language, updatedAt } = fileData;
     const dateModified = new Date(updatedAt);
-
-    // States
-    const [isOpen, setIsOpen] = useState(false);
 
     // [HANDLE] Open the a window for the snippet file
     const handleOpenSnippetFile = () => {

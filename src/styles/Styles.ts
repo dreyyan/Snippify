@@ -35,7 +35,7 @@ const Styles = {
     container: "grid grid-cols-7 box-border bg-white shadow-md px-12 py-14",
     folderShortcut: "text-xs text-left pl-4 font-bold text-[var(--background)] py-2 cursor-pointer",
     snippetItem: "flex justify-between px-4 py-1 text-sm w-full border-[rgba(90,90,90,0.2)] hover:bg-[#E6F6FB] cursor-pointer",
-    folderItem: "flex justify-between w-full text-sm border-b border-[rgba(90,90,90,0.2)] hover:border-t-red-500 cursor-pointer",
+    folderItem: "flex justify-between px-4 py-1 w-full text-sm border-b border-[rgba(90,90,90,0.2)] hover:border-t-red-500 cursor-pointer",
     snippetFileButton: "text-start text-sm w-full px-2 py-1 hover:bg-[rgba(90,90,90,0.1)] cursor-pointer",
 
     // Modal

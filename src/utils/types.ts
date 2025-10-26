@@ -1,4 +1,5 @@
 export interface Snippet {
+	[x: string]: any;
     id: number;
     title: string;
     language: string;
@@ -17,5 +18,6 @@ export interface User {
 export type SnippetData = Omit<Snippet, 'id' | 'updatedAt'>;
 
 export interface Folder {
+	id: any;
 	name: string;
 }

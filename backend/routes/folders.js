@@ -28,6 +28,22 @@ router.get('/', verifyToken, async (req, res) => {
     }
 });
 
+// [GET] Retrieve a specific folder
+router.get('/:id', verifyToken, async (req, res) => {
+    const id = parseInt(req.params.id);
+    
+
+    try {
+        const folders = await prisma.folder.findFirst({
+            where: { id, userId: req.userId },
+            include: { snippets: true },
+        });
+        res.status(200).json(successResponse("Folder retrieved successfully", folders));
+    } catch (err) {
+        res.status(400).json(errorResponse("Failed to fetch folder", err.message));
+    }
+});
+
 // [POST] Create a folder
 router.post('/', verifyToken, async (req, res) => {
     const { name } = req.body;
@@ -59,6 +75,25 @@ router.patch('/:id', verifyToken, async (req, res) => {
 });
 
 
+// [DELETE] Delete all folders
+router.delete('/', verifyToken, async (req, res) => {
+    try {
+
+        // Delete all snippets inside folder first
+        await prisma.snippet.deleteMany({
+            where: { userId: req.userId }
+        });
+
+        // Delete folders after
+        const deletedFolders = await prisma.folder.deleteMany({
+            where: { userId: req.userId }
+        });
+        res.status(200).json(successResponse("Folders deleted successfully", deletedFolders));
+    } catch (err) {
+        res.status(404).json(errorResponse("Failed to delete folders", err.message));
+    }
+});
+
 // [DELETE] Delete a folder
 router.delete('/:id', verifyToken, async (req, res) => {
     const folderId = parseInt(req.params.id);
@@ -66,7 +101,7 @@ router.delete('/:id', verifyToken, async (req, res) => {
     try {
 
         // Delete all snippets inside folder first
-        await prisma.snippets.deleteMany({
+        await prisma.snippet.deleteMany({
             where: { id: folderId }
         });
 

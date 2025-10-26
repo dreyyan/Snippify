@@ -6,10 +6,12 @@ import { getUserFoldersAndSnippets, getToken } from "../../utils/auth";
 import { useModal } from "../../context/ModalContext";
 import type { Folder, Snippet } from "../../utils/types";
 import NewSnippetForm from "./NewSnippetForm";
+import FolderItem from "./FolderItem";
 
 const MyFolders = () => {
 	// States
 	const [selectedSnippet, setSelectedSnippet] = useState(1);
+	const [selectedFolder, setSelectedFolder] = useState(1);
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [snippets, setSnippets] = useState<Snippet[]>([]);
 	// const [snippetData, setSnippetData] = useState<SnippetData>({
@@ -69,9 +71,11 @@ const MyFolders = () => {
 
 	// [HANDLE: Add Snippet] Send a request to create a new snippet for the current user and update the local state
 	const handleAddSnippet = async (snippetData: Omit<Snippet, 'id' | 'updatedAt'>) => {
+		const folderId = folders[selectedFolder - 1]?.id;
+
 		try {
 			const token = getToken();
-			const response = await fetch('http://localhost:3000/api/snippets', {
+			const response = await fetch(`http://localhost:3000/api/folders/${folderId}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -179,9 +183,9 @@ const MyFolders = () => {
 			{/* Navigation Pane - Folder (Tree View) */}
 			{folders.map((folder, index) => (
 				<button
-				onClick={() => setSelectedSnippet(index + 1)}
+				onClick={() => { setSelectedFolder(index + 1); console.log(`Selected Folder: ${index + 1}`) }}
 				onContextMenu={(e) => handleFolderContextMenu(e, folder.name)}
-				className={`${Styles.folderShortcut} ${index === selectedSnippet - 1 && 'shadow-sm bg-white text-[var(--primary)]'}`}>{folder.name}</button>
+				className={`${Styles.folderShortcut} ${index === selectedFolder - 1 && 'shadow-sm bg-white text-[var(--primary)]'}`}>{folder.name}</button>
 			))}
 		</div>
 
@@ -197,18 +201,20 @@ const MyFolders = () => {
 				<p>Date Modified</p>
 			</span>
 
-				{/* Snippet Files */}
+				{/* Folders & Snippet Files */}
 				<div className="w-full h-full">
-					{snippets.map((snippet, index) => (
+					{snippets
+					.filter(snippet => snippet.folderId === folders[selectedFolder - 1]?.id)
+					.map((snippet, index) => (
 						<div
-							key={snippet.id}
-							onClick={() => setSelectedSnippet(index + 1)}
-							className=""
-							onContextMenu={(e) => handleSnippetFileContextMenu(e, snippet.title)}
+						key={snippet.id}
+						onClick={() => setSelectedSnippet(index + 1)}
+						onContextMenu={(e) => handleSnippetFileContextMenu(e, snippet.title)}
 						>
-							<SnippetItem fileData={snippet} />
+						<SnippetItem fileData={snippet} />
 						</div>
-					))}
+					))
+					}
 				</div>
 
 				{/* Context Menu */}
