@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // Page Components
 import Home from "./pages/Home";
@@ -26,12 +26,13 @@ function App() {
         <Routes>
           <Route element={<MainLayout/>}>
             {/* Default Redirect */}
-            <Route path="/" element={<Home/>}/>
+            <Route path="/" element={<Navigate to="login" replace/>}/>
             {/* Routes: Auth */}
             <Route path="/login" element={<Login />} />
             <Route path="/sign-up" element={<SignUp />} />
 
             {/* Routes: Features */}
+            <Route path="/home" element={<Home/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/my-snippets" element={<MySnippets/>}/>
             <Route path="/my-links" element={<MyLinks/>}/>

@@ -15,11 +15,13 @@ const Dashboard = () => {
 	useEffect(() => {
 		const fetchData = async () => {
             const user = localStorage.getItem("user");
+            
             // [ERROR] Missing user
             if (!user) return;
 
             // Get user ID from data
-            const userId = JSON.parse(user).id;
+            const parsedUser = JSON.parse(user);
+            const userId = parsedUser.id;
 
             // Fetch actual user data
 			const data = await fetchUserData(userId);
@@ -35,8 +37,8 @@ const Dashboard = () => {
 	}, []);
 
     return (
-        <div className="px-12 py-6">
-            <h3>Welcome, {user?.name || "User"}</h3>
+        <div className="px-12 py-7">
+            <h2>Welcome, {user?.name || "User"}.</h2>
             {/* Welcome Section - Personalized greeting for the user */}
             {/* Quick Stats - Display metrics like snippets created, folders, shared links */}
             {/* Recent Snippets - Show up to 4 recent snippets with view/edit links */}

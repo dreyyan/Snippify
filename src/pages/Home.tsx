@@ -2,7 +2,6 @@
 import "../styles/index.css";
 
 // [IMPORT] Components
-import Header from "../components/Header/Header";
 import FeatureCard from "../components/HeroSection/FeatureCard";
 import Footer from "../components/Footer/Footer";
 

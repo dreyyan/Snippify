@@ -9,8 +9,10 @@ const SignUpForm = () => {
 
     // States
     const [formData, setFormData] = useState({
-        usernameEmail: "",
-        password: "",
+        usernameEmail: "dreyyan",
+        password: "dreyyan123",
+        // usernameEmail: "",
+        // password: "",
         rememberMe: false
     });
     const [showPassword, setShowPassword] = useState(false);
@@ -69,7 +71,7 @@ const SignUpForm = () => {
                 
                 // Save user data to local storage
                 localStorage.setItem("token", data.data.token);
-                localStorage.setItem("user", JSON.stringify(data.data));
+                localStorage.setItem("user", JSON.stringify(data.data.user));
 
                 // Navigate to dashboard
                 navigate('/dashboard');
