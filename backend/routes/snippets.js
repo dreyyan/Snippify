@@ -60,19 +60,45 @@ router.post('/:id', verifyToken, async (req, res) => {
 
     try {
         const snippet = await prisma.snippet.create({
-            data: { title, language, content, userId: req.userId, folderId }
+            data: { title, language, content, userid: req.userid, folderId }
         });
-        res.status(201).json(successResponse("Snippet created successfully", snippet));
+        res.status(201).json(successresponse("snippet created successfully", snippet));
     } catch (err) {
-        res.status(400).json(errorResponse("Failed to create a snippet", err.message));
+        res.status(400).json(errorresponse("failed to create a snippet", err.message));
+    }
+});
+
+// [PATCH] Rename a snippet
+router.patch('/:id', verifyToken, async (req, res) => {
+    const snippetId = parseInt(req.params.id);
+    const { title } = req.body;
+
+    try {
+        const snippet = await prisma.snippet.update({
+            where: { id: snippetId, userId: req.userId },
+            data: { title }
+        });
+        res.status(201).json(successresponse("snippet renamed successfully", snippet));
+    } catch (err) {
+        res.status(400).json(errorresponse("failed to rename snippet", err.message));
     }
 });
 
 // [PATCH] Update a snippet
 router.patch('/:id', verifyToken, async (req, res) => {
+    const { title, language, content } = req.body;
+    const snippetId = parseInt(req.params.id);
 
+    try {
+        const snippet = await prisma.snippet.update({
+            where: { id: snippetId, userId: req.userId },
+            data: { title, language, content }
+        });
+        res.status(201).json(successresponse("snippet updated successfully", snippet));
+    } catch (err) {
+        res.status(400).json(errorresponse("failed to update snippet", err.message));
+    }
 });
-
 
 // [DELETE] Delete a snippet
 router.delete('/:id', verifyToken, async (req, res) => {

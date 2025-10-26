@@ -60,20 +60,30 @@ router.post('/', verifyToken, async (req, res) => {
 
 // [PATCH] Rename a folder
 router.patch('/:id', verifyToken, async (req, res) => {
-    const folderId = req.params.id;
+    const folderId = parseInt(req.params.id);
     const { name } = req.body;
 
     try {
+        // Check if folder exists and belongs to user
+        const folder = await prisma.folder.findUnique({
+            where: { id: folderId },
+        });
+
+        // [ERROR] Unauthorized user
+        if (!folder || folder.userId !== req.userId) {
+            return res.status(403).json(errorResponse("Unauthorized or folder not found"));
+        }
+
+        // Update the folder name
         const renamedFolder = await prisma.folder.update({
-            where: { id: folderId, userId: req.userId },
-            data: { name }
+            where: { id: folderId },
+            data: { name },
         });
         res.status(200).json(successResponse("Folder renamed successfully", renamedFolder));
     } catch (err) {
         res.status(400).json(errorResponse("Failed to rename folder", err.message));
     }
 });
-
 
 // [DELETE] Delete all folders
 router.delete('/', verifyToken, async (req, res) => {
