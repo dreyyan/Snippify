@@ -83,7 +83,7 @@ const MyFolders = () => {
   
 		try {
 			const token = getToken();
-			const response = await fetch(`http://localhost:3000/api/folders/${folderId}`, {
+			const response = await fetch(`http://localhost:3000/api/snippets/${folderId}`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -97,7 +97,14 @@ const MyFolders = () => {
 			// If successful request, update folders state 
 			if (response.ok) {
 				console.info(`Snippet "${snippetData.title}" created successfully.`);
-				alert("Snippet created!");
+				
+				// Display modal
+				openModal({
+					type: 'info',
+					title: 'Snippet Created',
+					size: 'sm',
+					content: "Your new snippet has been successfully added."
+				});
 				setSnippets(prev => [...prev, data.data]);
 			} else {
 				console.error("Failed to create snippet:", data.message);
@@ -167,33 +174,50 @@ const MyFolders = () => {
 	};
 
 	// [HANDLE: Rename Folder] Send a request to rename the user's selected folder and update the local state
-	const handleRenameFolder = async (folderName: string) => {
-		// try {
-		// 	const token = getToken();
-		// 	const response = await fetch('http://localhost:3000/api/folders', {
-		// 		method: "PATCH",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
-		// 			"Authorization": `Bearer ${token}`,
-		// 		},
-		// 		body: JSON.stringify({ name }),
-		// 	});
+	const handleRenameFolder = async (newFolderName: string) => {
+		const folderId = selectedFolder;
 
-		// 	const data = await response.json();
+		// [ERROR] Missing folder ID
+		if (!folderId) {
+			console.error("No folder selected!");
+			alert("Please select a folder first.");
+			return;
+		}
 
-		// 	// If successful request, update folders state 
-		// 	if (response.ok) {
-		// 		console.info(`Folder "${name}" added successfully.`);
-		// 		alert("Folder created!");
-		// 		setFolders(prev => [...prev, data.data]);
-		// 	} else {
-		// 		console.error("Failed to add folder:", data.message);
-		// 		alert(data.message || "Failed to add folder.");
-		// 	}
-		// } catch (err) {
-		// 	console.error("Error adding folder:", err);
-		// 	alert("An error occurred while adding folder.");
-		// }	
+		try {
+			const token = getToken();
+			const response = await fetch(`http://localhost:3000/api/folders/${folderId}`, {
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`,
+				},
+				body: JSON.stringify({ newFolderName }),
+			});
+
+			const data = await response.json();
+
+			// If successful request, update folders state 
+			if (response.ok) {
+				console.info('Folder renamed successfully.');
+
+				// Display modal
+				openModal({
+					type: 'info',
+					title: 'Folder Renamed',
+					size: 'md',
+					content: "Folder has been successfully renamed."
+				});
+
+				setFolders(prev => [...prev, data.data]);
+			} else {
+				console.error("Failed to renaming folder:", data.message);
+				alert(data.message || "Failed to renaming folder.");
+			}
+		} catch (err) {
+			console.error("Error renaming folder:", err);
+			alert("An error occurred while renaming folder.");
+		}	
 	};
 
 	// [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
@@ -285,9 +309,20 @@ const MyFolders = () => {
 					onContextMenu={(e) => handleFolderContextMenu(e, folder.name)}
 					className={`${Styles.folderShortcut} flex justify-between items-center ${
 						folder.id === selectedFolder ? 'shadow-sm bg-white text-[var(--primary)]' : ''
-					}`}
-					>
+					}`}>
 					<span>{folder.name}</span>
+					{/* Folder - Operations */}
+					{folder.id === selectedFolder &&
+					<div className="space-x-2">
+					<button
+						onClick={(e) => {
+						e.stopPropagation();
+						handleRenameFolder(folder.name);
+						}}
+						className="cursor-pointer hover:opacity-70 transition"
+					>
+							<img src="/rename-folder-icon.svg" className="size-4" alt="Rename folder" />
+					</button>
 					<button
 						onClick={(e) => {
 						e.stopPropagation();
@@ -295,10 +330,10 @@ const MyFolders = () => {
 						}}
 						className="cursor-pointer hover:opacity-70 transition"
 					>
-						{folder.id === selectedFolder &&
 							<img src="/delete-folder-icon.svg" className="size-4" alt="Delete folder" />
-						}
 					</button>
+					</div>
+					}
 					</div>
 				))}
 				</div>
@@ -314,14 +349,14 @@ const MyFolders = () => {
 		onContextMenu={handleEmptyAreaContextMenu}
 		className="border border-l-0 border-[rgba(90,90,90,0.2)] col-span-5 shadow-md bg-white flex flex-col items-center min-h-100">
 			{/* Details Header */}
-			<span className="w-full flex justify-between px-4 py-2 [&>p]:text-xs">
+			<span className="w-full flex justify-between px-4 py-2 [&>p]:text-xs shadow-md">
 				<p>Name</p>
 				<p>Language</p>
 				<p>Date Modified</p>
 			</span>
 
 				{/* Folders & Snippet Files */}
-				<div className="w-full h-full">
+				<div className="w-full h-full pt-2">
 					{snippets
 					.filter(snippet => snippet.folderId === selectedFolder)
 					.map((snippet, index) => (
