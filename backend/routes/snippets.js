@@ -29,8 +29,8 @@ router.get('/:folder', verifyToken, async (req, res) => {
     const folder = req.params.folder;
 
     try {
-        const snippets = await prisma.snippet.findUnique({
-            where: {},
+        const snippets = await prisma.snippet.findMany({
+            where: { folder: { name: folder }, userId: req.userId }
         });
         res.status(200).json(successResponse(`${folder} snippets retrieved successfully`, snippets));
     } catch (err) {
@@ -60,16 +60,16 @@ router.post('/:id', verifyToken, async (req, res) => {
 
     try {
         const snippet = await prisma.snippet.create({
-            data: { title, language, content, userid: req.userid, folderId }
+            data: { title, language, content, userId: req.userId, folderId }
         });
-        res.status(201).json(successresponse("snippet created successfully", snippet));
+        res.status(201).json(successResponse("snippet created successfully", snippet));
     } catch (err) {
-        res.status(400).json(errorresponse("failed to create a snippet", err.message));
+        res.status(400).json(errorResponse("failed to create a snippet", err.message));
     }
 });
 
 // [PATCH] Rename a snippet
-router.patch('/:id', verifyToken, async (req, res) => {
+router.patch('/:id/rename', verifyToken, async (req, res) => {
     const snippetId = parseInt(req.params.id);
     const { title } = req.body;
 
@@ -78,14 +78,14 @@ router.patch('/:id', verifyToken, async (req, res) => {
             where: { id: snippetId, userId: req.userId },
             data: { title }
         });
-        res.status(201).json(successresponse("snippet renamed successfully", snippet));
+        res.status(201).json(successResponse("snippet renamed successfully", snippet));
     } catch (err) {
-        res.status(400).json(errorresponse("failed to rename snippet", err.message));
+        res.status(400).json(errorResponse("failed to rename snippet", err.message));
     }
 });
 
 // [PATCH] Update a snippet
-router.patch('/:id', verifyToken, async (req, res) => {
+router.patch('/:id/update', verifyToken, async (req, res) => {
     const { title, language, content } = req.body;
     const snippetId = parseInt(req.params.id);
 
@@ -94,9 +94,9 @@ router.patch('/:id', verifyToken, async (req, res) => {
             where: { id: snippetId, userId: req.userId },
             data: { title, language, content }
         });
-        res.status(201).json(successresponse("snippet updated successfully", snippet));
+        res.status(201).json(successResponse("snippet updated successfully", snippet));
     } catch (err) {
-        res.status(400).json(errorresponse("failed to update snippet", err.message));
+        res.status(400).json(errorResponse("failed to update snippet", err.message));
     }
 });
 
