@@ -11,8 +11,8 @@ import NewFolderForm from "./NewFolderForm";
 
 const MyFolders = () => {
 	// States
-	const [selectedSnippet, setSelectedSnippet] = useState(1);
-	const [selectedFolder, setSelectedFolder] = useState(1);
+	const [selectedSnippet, setSelectedSnippet] = useState(0);
+	const [selectedFolder, setSelectedFolder] = useState(0);
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [snippets, setSnippets] = useState<Snippet[]>([]);
 	// const [snippetData, setSnippetData] = useState<SnippetData>({
@@ -122,8 +122,58 @@ const MyFolders = () => {
 	};
 
 	// [HANDLE: Delete Snippet] Send a request to delete the user's selected folder and update the local state
-	const handleDeleteSnippet = () => {
-		
+	const handleDeleteSnippet = async () => {
+		const snippetId = selectedSnippet;
+
+		// [ERROR] Missing folder ID
+		if (!snippetId) {
+			console.error("No snippet selected!");
+			openModal({
+				type: 'error',
+				title: 'Error',
+				size: 'sm',
+				content: "Please select a snippet first."
+			});
+			return;
+		}
+  
+		try {
+			const token = getToken();
+			const response = await fetch(`http://localhost:3000/api/snippets/${snippetId}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+					"Authorization": `Bearer ${token}`,
+				},
+			});
+
+			const data = await response.json();
+
+			// If successful request, update folders state
+			if (response.ok) {
+				console.info(`Snippet deleted successfully.`);
+				
+				// Display modal
+				openModal({
+					type: 'info',
+					title: 'Snippet Deleted',
+					size: 'sm',
+					content: "Your snippet has been deleted."
+				});
+				setSnippets(prev => [...prev, data.data]);
+			} else {
+				console.error("Failed to delete snippet:", data.message);
+				alert(data.message || "Failed to delete snippet.");
+			}
+		} catch (err) {
+			console.error("Error deleting snippet:", err);
+			openModal({
+				type: 'error',
+				title: 'Error',
+				size: 'sm',
+				content: "An error occured while deleting the snippet."
+			});
+		}
 	};
 
 	// ============================== Folders Implementation ==============================
@@ -260,6 +310,27 @@ const MyFolders = () => {
 
 	// ============================== Modal Display Implementation ==============================
 	const handleShowNewSnippetModal = () => {
+		if (folders.length === 0) {
+			// [MODAL: Error] No existing folder
+			openModal({
+				type: 'error',
+				title: 'Error: Folder',
+				size: 'md',
+				content: "There are currently no existing folders."
+			});
+			return;
+		}
+		if (selectedFolder === 0) {
+			// [MODAL: Error] No selected folder
+			openModal({
+				type: 'error',
+				title: 'Error: Folder',
+				size: 'md',
+				content: "Please select a folder before creating a snippet."
+			});
+			return;			
+		}
+		
 		openModal({
 			type: 'prompt',
 			title: 'Create Snippet',
@@ -358,7 +429,7 @@ const MyFolders = () => {
 				{/* Folders & Snippet Files */}
 				<div className="w-full h-full pt-2">
 					{snippets
-					.filter(snippet => snippet.folderId === selectedFolder)
+					.filter(snippet => snippet.id === selectedFolder)
 					.map((snippet, index) => (
 						<div
 						key={snippet.id}

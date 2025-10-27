@@ -1,5 +1,5 @@
 export interface Snippet {
-	[x: string]: any;
+	// [x: string]: any;
     id: number;
     title: string;
     language: string;
