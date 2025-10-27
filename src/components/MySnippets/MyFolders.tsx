@@ -8,6 +8,7 @@ import type { Folder, Snippet } from "../../utils/types";
 import NewSnippetForm from "./NewSnippetForm";
 import FolderItem from "./FolderItem";
 import NewFolderForm from "./NewFolderForm";
+import RenameFolderForm from "./RenameFolderForm";
 
 const MyFolders = () => {
 	// States
@@ -364,6 +365,24 @@ const MyFolders = () => {
 		});
 	};
 
+	const handleShowRenameFolderModal = () => {
+		openModal({
+			type: 'prompt',
+			title: 'Rename Folder',
+			size: 'sm',
+			children: (
+				<RenameFolderForm
+				onSubmit={name => {
+					handleRenameFolder(name);
+					closeModal();
+				}}
+				handleCloseModal={closeModal}
+				/>
+			)
+		});
+		// handleRenameFolder(folder.name);
+	};
+
 	return (
 	<div className={Styles.container}>
 			{/* Navigation Pane - Folder (Tree View) */}
@@ -388,7 +407,7 @@ const MyFolders = () => {
 					<button
 						onClick={(e) => {
 						e.stopPropagation();
-						handleRenameFolder(folder.name);
+						handleShowRenameFolderModal();
 						}}
 						className="cursor-pointer hover:opacity-70 transition"
 					>
