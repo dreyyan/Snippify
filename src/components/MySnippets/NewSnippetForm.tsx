@@ -44,7 +44,7 @@ const NewSnippetForm: React.FC<{ onSubmit: (data: SnippetData) => void, handleCl
         onChange={e => setData({ ...data, content: e.target.value })}
         className={Styles.formInput}
         />
-        <div className="flex justify-end gap-x-4">
+        <div className="flex justify-end gap-x-4 mt-2">
             <button type="button" onClick={handleCloseModal} className={Styles.secondaryButton}>Close</button>
             <button type="submit" className={Styles.primaryModalButton}>Create</button>
         </div>

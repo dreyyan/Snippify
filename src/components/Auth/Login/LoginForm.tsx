@@ -65,8 +65,8 @@ const SignUpForm = () => {
                 openModal({
                     type: 'info',
                     title: 'Success',
-                    content: 'You have successfully logged in. Redirecting to your dashboard...',
-                    size: 'md'
+                    content: 'You have successfully logged in!',
+                    size: 'sm'
                 });
                 
                 // Save user data to local storage

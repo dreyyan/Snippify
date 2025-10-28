@@ -101,7 +101,7 @@ const MyFolders = () => {
 				
 				// Display modal
 				openModal({
-					type: 'info',
+					type: 'confirm',
 					title: 'Snippet Created',
 					size: 'sm',
 					content: "Your new snippet has been successfully added."
@@ -207,9 +207,9 @@ const MyFolders = () => {
 				
 				// Display modal
 				openModal({
-					type: 'info',
+					type: 'confirm',
 					title: 'Folder Created',
-					size: 'md',
+					size: 'sm',
 					content: "Your new folder has been successfully added."
 				});
 
@@ -220,18 +220,27 @@ const MyFolders = () => {
 			}
 		} catch (err) {
 			console.error("Error adding folder:", err);
-			alert("An error occurred while adding folder.");
+			openModal({
+				type: 'error',
+				title: 'Error',
+				size: 'sm',
+				content: "An error occured while creating your folder."
+			});
 		}
 	};
 
 	// [HANDLE: Rename Folder] Send a request to rename the user's selected folder and update the local state
-	const handleRenameFolder = async (newFolderName: string) => {
+	const handleRenameFolder = async (name: string) => {
 		const folderId = selectedFolder;
 
 		// [ERROR] Missing folder ID
 		if (!folderId) {
-			console.error("No folder selected!");
-			alert("Please select a folder first.");
+			openModal({
+				type: 'error',
+				title: 'Error',
+				size: 'sm',
+				content: "Please select a folder first."
+			});
 			return;
 		}
 
@@ -243,24 +252,22 @@ const MyFolders = () => {
 					"Content-Type": "application/json",
 					"Authorization": `Bearer ${token}`,
 				},
-				body: JSON.stringify({ newFolderName }),
+				body: JSON.stringify({ name }),
 			});
 
 			const data = await response.json();
 
 			// If successful request, update folders state 
 			if (response.ok) {
-				console.info('Folder renamed successfully.');
-
 				// Display modal
 				openModal({
-					type: 'info',
+					type: 'confirm',
 					title: 'Folder Renamed',
-					size: 'md',
+					size: 'sm',
 					content: "Folder has been successfully renamed."
 				});
 
-				setFolders(prev => [...prev, data.data]);
+				setFolders(prev => prev.map(folder => folder.id === data.data.id? data.data : folder));
 			} else {
 				console.error("Failed to renaming folder:", data.message);
 				alert(data.message || "Failed to renaming folder.");
@@ -272,7 +279,7 @@ const MyFolders = () => {
 	};
 
 	// [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
-	const handleDeleteFolder = async (folderName: string) => {
+	const handleDeleteFolder = async (name: string) => {
 		try {
 			const token = getToken();
 			const response = await fetch('http://localhost:3000/api/folders', {
@@ -281,24 +288,24 @@ const MyFolders = () => {
 					"Content-Type": "application/json",
 					"Authorization": `Bearer ${token}`,
 				},
-				body: JSON.stringify({ folderName }),
+				body: JSON.stringify({ name }),
 			});
 
 			const data = await response.json();
 
 			// If successful request, update folders state 
 			if (response.ok) {
-				console.info(`Folder "${folderName}" deleted successfully.`);
+				console.info(`Folder "${name}" deleted successfully.`);
 
 				// Display modal
 				openModal({
-					type: 'info',
+					type: 'confirm',
 					title: 'Folder Deleted',
-					size: 'md',
+					size: 'sm',
 					content: "Your folder has been successfully deleted."
 				});
 
-				setFolders(prev => prev.filter(folder => folder.name !== folderName));
+				setFolders(prev => prev.filter(folder => folder.name !== name));
 			} else {
 				console.error("Failed to delete folder:", data.message);
 				alert(data.message || "Failed to delete folder.");
@@ -335,7 +342,7 @@ const MyFolders = () => {
 		openModal({
 			type: 'prompt',
 			title: 'Create Snippet',
-			size: 'lg',
+			size: 'md',
 			children: (
 			<NewSnippetForm
 				onSubmit={data => {
