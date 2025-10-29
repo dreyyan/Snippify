@@ -267,13 +267,13 @@ const MyFolders = () => {
 	};
 
 	// [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
-	const handleDeleteFolder = async (name: string) => {
+	const handleDeleteFolder = async (name: string, id: string) => {
 		try {
 			const token = getToken();
-			const response = await fetch('http://localhost:3000/api/folders', {
+			const response = await fetch(`http://localhost:3000/api/folders/${id}`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
-				body: JSON.stringify({ name }),
+				body: JSON.stringify({ id }),
 			});
 
 			const data = await response.json();
@@ -290,7 +290,7 @@ const MyFolders = () => {
 					content: "Your folder has been successfully deleted."
 				});
 
-				setFolders(prev => prev.filter(folder => folder.name !== name));
+				setFolders(prev => prev.filter(folder => folder.id !== id));
 			} else {
 				console.error("Failed to delete folder:", data.message);
 				alert(data.message || "Failed to delete folder.");
@@ -408,7 +408,7 @@ const MyFolders = () => {
 					<button
 						onClick={(e) => {
 						e.stopPropagation();
-						handleDeleteFolder(folder.name);
+						handleDeleteFolder(folder.name, folder.id);
 						}}
 						className="cursor-pointer hover:opacity-70 transition"
 					>
