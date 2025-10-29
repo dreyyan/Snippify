@@ -6,9 +6,10 @@ import { getUserFoldersAndSnippets, getToken } from "../../utils/auth";
 import { useModal } from "../../context/ModalContext";
 import type { Folder, Snippet } from "../../utils/types";
 import NewSnippetForm from "./NewSnippetForm";
-import FolderItem from "./FolderItem";
+import FolderItem from "./FolderItem"; // Consider deletion
 import NewFolderForm from "./NewFolderForm";
 import RenameFolderForm from "./RenameFolderForm";
+import { errorCreatingSnippetModal, failedFolderCreationModal, failedFolderDeletionModal, failedFolderRenameModal, failedSnippetCreationModal, failedSnippetDeletionModal, folderCreatedModal, folderDeletedModal, folderRenamedModal, generalErrorModal, noFoldersModal, noSelectedFolderModal, noSelectedSnippetModal, snippetCreatedModal, snippetDeletedModal } from "../../utils/openPresets";
 
 const MyFolders = () => {
 	// States
@@ -77,8 +78,7 @@ const MyFolders = () => {
 
 		// [ERROR] Missing folder ID
 		if (!folderId) {
-			console.error("No folder selected!");
-			alert("Please select a folder first.");
+			openModal(noSelectedFolderModal);
 			return;
 		}
   
@@ -95,22 +95,15 @@ const MyFolders = () => {
 			// If successful request, update folders state 
 			if (response.ok) {
 				console.info(`Snippet "${snippetData.title}" created successfully.`);
-				
-				// Display modal
-				openModal({
-					type: 'confirm',
-					title: 'Snippet Created',
-					size: 'sm',
-					content: "Your new snippet has been successfully added."
-				});
+				openModal(snippetCreatedModal);
 				setSnippets(prev => [...prev, data.data]);
 			} else {
 				console.error("Failed to create snippet:", data.message);
-				alert(data.message || "Failed to create snippet.");
+				openModal(failedSnippetCreationModal)
 			}
-		} catch (err) {
-			console.error("Error creating snippet:", err);
-			alert("An error occurred while creating snippet.");
+		} catch (err: unknown) {
+			if (err instanceof Error) console.error(err.message);
+			openModal(generalErrorModal());
 		}
 	};
 
@@ -123,15 +116,9 @@ const MyFolders = () => {
 	const handleDeleteSnippet = async () => {
 		const snippetId = selectedSnippet;
 
-		// [ERROR] Missing folder ID
+		// [ERROR] No selected snippet
 		if (!snippetId) {
-			console.error("No snippet selected!");
-			openModal({
-				type: 'error',
-				title: 'Error',
-				size: 'sm',
-				content: "Please select a snippet first."
-			});
+			openModal(noSelectedSnippetModal);
 			return;
 		}
   
@@ -147,27 +134,15 @@ const MyFolders = () => {
 			// If successful request, update folders state
 			if (response.ok) {
 				console.info(`Snippet deleted successfully.`);
-				
-				// Display modal
-				openModal({
-					type: 'info',
-					title: 'Snippet Deleted',
-					size: 'sm',
-					content: "Your snippet has been deleted."
-				});
+				openModal(snippetDeletedModal);
 				setSnippets(prevSnippets => prevSnippets.filter((snippet) => snippet.id !== snippetId));
 			} else {
 				console.error("Failed to delete snippet:", data.message);
-				alert(data.message || "Failed to delete snippet.");
+				openModal(failedSnippetDeletionModal);
 			}
 		} catch (err) {
-			console.error("Error deleting snippet:", err);
-			openModal({
-				type: 'error',
-				title: 'Error',
-				size: 'sm',
-				content: "An error occured while deleting the snippet."
-			});
+			if (err instanceof Error) console.error(err.message);
+			console.error(generalErrorModal());
 		}
 	};
 
@@ -197,26 +172,16 @@ const MyFolders = () => {
 				console.info(`Folder "${name}" added successfully.`);
 				
 				// Display modal
-				openModal({
-					type: 'confirm',
-					title: 'Folder Created',
-					size: 'sm',
-					content: "Your new folder has been successfully added."
-				});
+				openModal(folderCreatedModal);
 
 				setFolders(prev => [...prev, data.data]);
 			} else {
 				console.error("Failed to add folder:", data.message);
-				alert(data.message || "Failed to add folder.");
+				openModal(failedFolderCreationModal);
 			}
 		} catch (err) {
-			console.error("Error adding folder:", err);
-			openModal({
-				type: 'error',
-				title: 'Error',
-				size: 'sm',
-				content: "An error occured while creating your folder."
-			});
+			if (err instanceof Error) console.error(err.message);
+			openModal(generalErrorModal());
 		}
 	};
 
@@ -226,12 +191,7 @@ const MyFolders = () => {
 
 		// [ERROR] Missing folder ID
 		if (!folderId) {
-			openModal({
-				type: 'error',
-				title: 'Error',
-				size: 'sm',
-				content: "Please select a folder first."
-			});
+			openModal(noSelectedFolderModal);
 			return;
 		}
 
@@ -247,22 +207,15 @@ const MyFolders = () => {
 
 			// If successful request, update folders state 
 			if (response.ok) {
-				// Display modal
-				openModal({
-					type: 'confirm',
-					title: 'Folder Renamed',
-					size: 'sm',
-					content: "Folder has been successfully renamed."
-				});
-
+				openModal(folderRenamedModal);
 				setFolders(prev => prev.map(folder => folder.id === data.data.id? data.data : folder));
 			} else {
-				console.error("Failed to renaming folder:", data.message);
-				alert(data.message || "Failed to renaming folder.");
+				console.error("Failed to rename folder:", data.message);
+				openModal(failedFolderRenameModal);
 			}
 		} catch (err) {
-			console.error("Error renaming folder:", err);
-			alert("An error occurred while renaming folder.");
+			if (err instanceof Error) console.error(err.message);
+			openModal(failedFolderRenameModal);
 		}	
 	};
 
@@ -281,46 +234,26 @@ const MyFolders = () => {
 			// If successful request, update folders state 
 			if (response.ok) {
 				console.info(`Folder "${name}" deleted successfully.`);
-
-				// Display modal
-				openModal({
-					type: 'confirm',
-					title: 'Folder Deleted',
-					size: 'sm',
-					content: "Your folder has been successfully deleted."
-				});
-
+				openModal(folderDeletedModal);
 				setFolders(prev => prev.filter(folder => folder.id !== id));
 			} else {
 				console.error("Failed to delete folder:", data.message);
-				alert(data.message || "Failed to delete folder.");
+				openModal(failedFolderDeletionModal);
 			}
 		} catch (err) {
-			console.error("Error deleting folder:", err);
-			alert("An error occurred while deleting folder.");
+			if (err instanceof Error) console.error(err.message);
+			openModal(generalErrorModal());
 		}	
 	};
 
 	// ============================== Modal Display Implementation ==============================
 	const handleShowNewSnippetModal = () => {
 		if (folders.length === 0) {
-			// [MODAL: Error] No existing folder
-			openModal({
-				type: 'error',
-				title: 'Error: Folder',
-				size: 'md',
-				content: "There are currently no existing folders."
-			});
+			openModal(noFoldersModal);
 			return;
 		}
 		if (selectedFolder === 0) {
-			// [MODAL: Error] No selected folder
-			openModal({
-				type: 'error',
-				title: 'Error: Folder',
-				size: 'md',
-				content: "Please select a folder before creating a snippet."
-			});
+			openModal(noSelectedFolderModal);
 			return;			
 		}
 		

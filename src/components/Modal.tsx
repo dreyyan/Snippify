@@ -17,7 +17,7 @@ type PromptModalProps = BaseModalProps & {
 };
 
 type InfoModalProps = BaseModalProps & {
-  type: 'info' | 'alert' | 'confirm' | 'error';
+  type: 'info' | 'alert' | 'confirm' | 'error' | 'warning';
   onConfirm?: never;
 };
 
