@@ -102,7 +102,7 @@ router.patch('/:id/update', verifyToken, async (req, res) => {
 
 // [DELETE] Delete a snippet
 router.delete('/:id', verifyToken, async (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
     try {
         const deletedSnippet = await prisma.snippet.delete({
@@ -111,6 +111,20 @@ router.delete('/:id', verifyToken, async (req, res) => {
         res.status(200).json(successResponse("Snippet deleted successfully", deletedSnippet));
     } catch (err) {
         res.status(404).json(errorResponse("Failed to delete a snippet", err.message));
+    }
+});
+
+// [DELETE] Delete all snippets
+router.delete('/folder/:id', verifyToken, async (req, res) => {
+    const id =  parseInt(req.params.id);
+
+    try {
+        const deletedSnippets = await prisma.snippet.deleteMany({
+            where: { folderId: id, userId: req.userId },
+        });
+        res.status(200).json(successResponse("Snippets deleted successfully", deletedSnippets));
+    } catch (err) {
+        res.status(404).json(errorResponse("Failed to delete snippets", err.message));
     }
 });
 
