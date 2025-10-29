@@ -5,6 +5,7 @@ export interface Snippet {
     language: string;
     content: string;
 	updatedAt: Date;
+    folderId: number;
 }
 
 export interface User {

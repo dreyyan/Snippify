@@ -86,10 +86,7 @@ const MyFolders = () => {
 			const token = getToken();
 			const response = await fetch(`http://localhost:3000/api/snippets/${folderId}`, {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${token}`,
-				},
+				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
 				body: JSON.stringify(snippetData),
 			});
 
@@ -142,10 +139,7 @@ const MyFolders = () => {
 			const token = getToken();
 			const response = await fetch(`http://localhost:3000/api/snippets/${snippetId}`, {
 				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${token}`,
-				},
+				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
 			});
 
 			const data = await response.json();
@@ -161,7 +155,7 @@ const MyFolders = () => {
 					size: 'sm',
 					content: "Your snippet has been deleted."
 				});
-				setSnippets(prev => [...prev, data.data]);
+				setSnippets(prevSnippets => prevSnippets.filter((snippet) => snippet.id !== snippetId));
 			} else {
 				console.error("Failed to delete snippet:", data.message);
 				alert(data.message || "Failed to delete snippet.");
@@ -192,10 +186,7 @@ const MyFolders = () => {
 			const token = getToken();
 			const response = await fetch('http://localhost:3000/api/folders', {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${token}`,
-				},
+				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
 				body: JSON.stringify({ name }),
 			});
 
@@ -248,10 +239,7 @@ const MyFolders = () => {
 			const token = getToken();
 			const response = await fetch(`http://localhost:3000/api/folders/${folderId}`, {
 				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${token}`,
-				},
+				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
 				body: JSON.stringify({ name }),
 			});
 
@@ -284,10 +272,7 @@ const MyFolders = () => {
 			const token = getToken();
 			const response = await fetch('http://localhost:3000/api/folders', {
 				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": `Bearer ${token}`,
-				},
+				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
 				body: JSON.stringify({ name }),
 			});
 
@@ -396,9 +381,9 @@ const MyFolders = () => {
 			{folders && folders.length > 0 ?
 			(
 				<div className="col-span-2 border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[var(--secondary)]">
-				{folders.map((folder, index) => (
+				{folders.map((folder) => (
 					<div
-					key={index}
+					key={folder.id}
 					onClick={() => {
 						setSelectedFolder(folder.id);
 						console.log(`Selected Folder: ${folder.id}`);
@@ -440,7 +425,7 @@ const MyFolders = () => {
 				</div>
 			)}
 
-		{/* Files & Folders */}
+		{/* Snippet Files Area */}
 		<div
 		onClick={handleOutsideClick}
 		onContextMenu={handleEmptyAreaContextMenu}
@@ -452,14 +437,14 @@ const MyFolders = () => {
 				<p>Date Modified</p>
 			</span>
 
-				{/* Folders & Snippet Files */}
+				{/* Snippet Files */}
 				<div className="w-full h-full pt-2">
 					{snippets
-					.filter(snippet => snippet.id === selectedFolder)
-					.map((snippet, index) => (
+					.filter(snippet => snippet.folderId === selectedFolder)
+					.map((snippet) => (
 						<div
 						key={snippet.id}
-						onClick={() => setSelectedSnippet(index + 1)}
+						onClick={() => setSelectedSnippet(snippet.id)}
 						onContextMenu={(e) => handleSnippetFileContextMenu(e, snippet.title)}
 						>
 						<SnippetItem fileData={snippet} />
