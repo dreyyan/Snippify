@@ -56,7 +56,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen = true, onClose, type, onConfirm, 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
+        <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[1px] bg-black/40">
             <div ref={modalRef} className={`border-2 border-[rgba(23,32,38,0.1)] bg-[var(--background)] rounded-lg shadow-md space-y-4 p-6  ${size === 'sm' ? 'w-70' : size === 'lg' ? 'w-128' : 'w-96'} ${className}`}>
                 {/* Header */}
                 <span className="flex justify-between items-center gap-x-2 mb-3">

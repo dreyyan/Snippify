@@ -9,7 +9,7 @@ const Styles = {
     
     // Buttons
     primaryButton: "text-sm font-bold w-full px-4 py-2 rounded-full text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[oklch(55%_0.163_235.38)] cursor-pointer",
-    primaryModalButton: "text-sm font-bold w-16 px-2 py-2 rounded-md text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[#018ec2] cursor-pointer",
+    primaryModalButton: "text-xs font-bold w-16 px-2 py-2 rounded-full text-[var(--text-on-primary)] bg-[var(--primary)] transition-colors duration-200 hover:bg-[#018ec2] cursor-pointer",
     secondaryButton: "group text-[var(--text-secondary)] text-xs flex justify-center items-center gap-x-2 px-3 py-2 rounded-md cursor-pointer transition-colors duration-300 hover:text-[var(--text-primary)]",
     oAuthButton: "group border text-[var(--text-secondary)] border-[var(--secondary)] text-xs flex justify-center items-center gap-x-2 w-full px-3 py-2 rounded-md cursor-pointer transition-colors duration-300 hover:text-[var(--background)] hover:bg-[var(--secondary)] hover:border-[var(--secondary)] [&>p]:hover:text-[var(--background)]",
 

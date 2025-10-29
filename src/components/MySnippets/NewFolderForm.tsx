@@ -25,12 +25,12 @@ const NewFolderForm: React.FC<{ onSubmit: (name: string) => void, handleCloseMod
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
         type="text"
-        placeholder="Title"
+        placeholder="e.g. JavaScript"
         value={folderName}
         onChange={e => setFolderName(e.target.value)}
         className={Styles.formInput}
         />
-        <div className="flex justify-end gap-x-4">
+        <div className="flex justify-end">
             <button type="button" onClick={handleCloseModal} className={Styles.secondaryButton}>Close</button>
             <button type="submit" className={Styles.primaryModalButton}>Create</button>
         </div>
