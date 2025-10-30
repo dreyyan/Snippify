@@ -364,10 +364,10 @@ const MyFolders = () => {
 		onContextMenu={handleEmptyAreaContextMenu}
 		className="border border-l-0 border-[rgba(90,90,90,0.2)] col-span-5 shadow-md bg-white flex flex-col items-center min-h-100">
 			{/* Details Header */}
-			<span className="w-full flex justify-between px-4 py-2 [&>p]:text-xs shadow-md">
-				<p>Name</p>
-				<p>Language</p>
-				<p>Date Modified</p>
+			<span className="w-full grid grid-cols-3 px-4 py-2 [&>p]:text-xs shadow-md">
+				<p className="text-left">Name</p>
+				<p className="text-center">Language</p>
+				<p className="text-right">Date Modified</p>
 			</span>
 
 				{/* Snippet Files */}

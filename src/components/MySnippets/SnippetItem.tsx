@@ -29,9 +29,9 @@ const SnippetItem: React.FC<SnippetItemProps> = ({ fileData }) => {
     return (
         <button onClick={ () => handleOpenSnippetFile()}
         className={Styles.snippetItem}>
-            <p className="font-semibold">{title}</p>
-            <p>{language}</p>
-            <p>{dateModified.toDateString()}</p>
+            <p className="text-left font-semibold">{title}</p>
+            <p className="text-center">{language}</p>
+            <p className="text-right">{dateModified.toDateString()}</p>
         </button>
     );
 };
