@@ -12,7 +12,7 @@ const Home = () => {
             <div className="flex flex-1 flex-col gap-y-12 py-10">
                 {/* Header Text */}
                 <div className="px-[20%] space-y-4 [&_:where(b)]:text-[var(--primary)] [&_:where(b)]:font-semibold [&_:where(b)]:text-shadow-lg [&_:where(b)]:text-shadow-[rgba(0,129,175,0.1)]">
-                    <h1 className="text-center text-[var(--text-primary)]"><b>Snip</b> it, <b>Ship</b> it.</h1>
+                    <p className="text-center tracking-[0.12rem] bbh-sans-hegarty-regular text-4xl text-[var(--text-primary)]"><b>Snip</b> it, <b>Ship</b> it.</p>
                     <p className="text-sm text-center text-[var(--text-secondary)]">
                         Organize, search, and share code snippets in intuitive file hierarchies—starting with programming languages and customizable user folders.
                     </p>

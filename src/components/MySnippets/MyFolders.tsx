@@ -9,7 +9,7 @@ import NewSnippetForm from "./NewSnippetForm";
 import FolderItem from "./FolderItem"; // Consider deletion
 import NewFolderForm from "./NewFolderForm";
 import RenameFolderForm from "./RenameFolderForm";
-import { errorCreatingSnippetModal, failedFolderCreationModal, failedFolderDeletionModal, failedFolderRenameModal, failedSnippetCreationModal, failedSnippetDeletionModal, folderCreatedModal, folderDeletedModal, folderRenamedModal, generalErrorModal, noFoldersModal, noSelectedFolderModal, noSelectedSnippetModal, snippetCreatedModal, snippetDeletedModal } from "../../utils/openPresets";
+import { failedFolderCreationModal, failedFolderDeletionModal, failedFolderRenameModal, failedSnippetCreationModal, failedSnippetDeletionModal, folderCreatedModal, folderDeletedModal, folderRenamedModal, generalErrorModal, noFoldersModal, noSelectedFolderModal, noSelectedSnippetModal, snippetCreatedModal, snippetDeletedModal } from "../../utils/openPresets";
 
 const MyFolders = () => {
 	// States

@@ -13,9 +13,9 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ iconUrl, title, description }
             </div>
             
             {/* Feature Title & Description */}
-            <div className="max-w-xs text-center border-1 border-gray-100 rounded-md -m-6 px-6 pb-5 pt-7 shadow-md bg-[#FFFFFF]">
+            <div className="max-w-[20rem] text-center border-1 border-gray-100 rounded-md -m-6 px-6 pb-5 pt-7 shadow-md bg-[#FFFFFF]">
                 <p className="text-lg leading-loose roboto-bold text-[var(--text-primary)]">{title}</p>
-                <p className="w-full leading-tight text-sm roboto-medium text-[var(--text-secondary)]">{description}</p>
+                <p className="w-full leading-tight text-xs roboto-medium text-[var(--text-secondary)]">{description}</p>
             </div>
         </div>
     );
