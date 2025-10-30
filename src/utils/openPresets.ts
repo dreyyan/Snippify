@@ -16,6 +16,13 @@ export const snippetCreatedModal: ModalProps = {
   content: "Your new snippet has been successfully added.",
 };
 
+export const snippetRenamedModal: ModalProps = {
+  type: "info",
+  title: "Snippet Renamed",
+  size: "sm",
+  content: "Your snippet has been succesfully renamed.",
+};
+
 export const snippetDeletedModal: ModalProps = {
   type: "info",
   title: "Snippet Deleted",
@@ -30,18 +37,18 @@ export const folderCreatedModal: ModalProps = {
   content: "Your new folder has been successfully created.",
 };
 
-export const folderDeletedModal: ModalProps = {
-  type: "info",
-  title: "Folder Deleted",
-  size: "sm",
-  content: "Your folder has been succesfully deleted.",
-};
-
 export const folderRenamedModal: ModalProps = {
   type: "info",
   title: "Folder Renamed",
   size: "sm",
   content: "Your folder has been succesfully renamed.",
+};
+
+export const folderDeletedModal: ModalProps = {
+  type: "info",
+  title: "Folder Deleted",
+  size: "sm",
+  content: "Your folder has been succesfully deleted.",
 };
 
 // ! Error Modals
@@ -65,6 +72,13 @@ export const failedFolderCreationModal: ModalProps = {
   title: "Failed to Create Folder",
   size: "sm",
   content: "Failed to create folder, please try again.",
+};
+
+export const failedSnippetRenameModal: ModalProps = {
+  type: "error",
+  title: "Failed to Rename Snippet",
+  size: "sm",
+  content: "Failed to rename snippet, please try again.",
 };
 
 export const failedFolderDeletionModal: ModalProps = {

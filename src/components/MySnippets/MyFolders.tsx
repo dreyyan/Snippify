@@ -9,7 +9,8 @@ import NewSnippetForm from "./NewSnippetForm";
 import FolderItem from "./FolderItem"; // Consider deletion
 import NewFolderForm from "./NewFolderForm";
 import RenameFolderForm from "./RenameFolderForm";
-import { failedFolderCreationModal, failedFolderDeletionModal, failedFolderRenameModal, failedSnippetCreationModal, failedSnippetDeletionModal, folderCreatedModal, folderDeletedModal, folderRenamedModal, generalErrorModal, noFoldersModal, noSelectedFolderModal, noSelectedSnippetModal, snippetCreatedModal, snippetDeletedModal } from "../../utils/openPresets";
+import { failedFolderCreationModal, failedFolderDeletionModal, failedFolderRenameModal, failedSnippetCreationModal, failedSnippetDeletionModal, failedSnippetRenameModal, folderCreatedModal, folderDeletedModal, folderRenamedModal, generalErrorModal, noFoldersModal, noSelectedFolderModal, noSelectedSnippetModal, snippetCreatedModal, snippetDeletedModal, snippetRenamedModal } from "../../utils/openPresets";
+import RenameSnippetForm from "./RenameSnippetForm";
 
 const MyFolders = () => {
 	// States
@@ -108,8 +109,40 @@ const MyFolders = () => {
 	};
 
 	// [HANDLE: Rename Snippet] Send a request to rename the user's selected folder and update the local state
-	const handleRenameSnippet = () => {
-		
+	const handleRenameSnippet = async (title: string) => {
+		const snippetId = selectedSnippet;
+
+		// [ERROR] Missing snippet ID
+		if (!snippetId) {
+			openModal(noSelectedSnippetModal);
+			return;
+		}
+
+		try {
+			const token = getToken();
+			const response = await fetch(`http://localhost:3000/api/snippets/${snippetId}/rename`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
+				body: JSON.stringify({ title }),
+			});
+
+			const data = await response.json();
+
+			// If successful request, update folders state 
+			if (response.ok) {
+				openModal(snippetRenamedModal);
+				setSnippets(prev =>
+  					prev.map(snippet =>
+    					snippet.id === data.data.id ? { ...snippet, title: data.data.title } : snippet
+					));
+			} else {
+				console.error("Failed to rename snippet:", data.message);
+				openModal(generalErrorModal());
+			}
+		} catch (err) {
+			if (err instanceof Error) console.error(err.message);
+			openModal(failedSnippetRenameModal);
+		}
 	};
 
 	// [HANDLE: Delete Snippet] Send a request to delete the user's selected folder and update the local state
@@ -215,8 +248,8 @@ const MyFolders = () => {
 			}
 		} catch (err) {
 			if (err instanceof Error) console.error(err.message);
-			openModal(failedFolderRenameModal);
-		}	
+			openModal(generalErrorModal());
+		}
 	};
 
 	// [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
@@ -269,6 +302,23 @@ const MyFolders = () => {
 				}}
 				handleCloseModal={closeModal}
 			/>
+			)
+		});
+	};
+
+	const handleShowRenameSnippetModal = () => {
+		openModal({
+			type: 'prompt',
+			title: 'Rename Snippet',
+			size: 'sm',
+			children: (
+				<RenameSnippetForm
+				onSubmit={title => {
+					handleRenameSnippet(title);
+					closeModal();
+				}}
+				handleCloseModal={closeModal}
+				/>
 			)
 		});
 	};
@@ -377,7 +427,7 @@ const MyFolders = () => {
 					.map((snippet) => (
 						<div
 						key={snippet.id}
-						onClick={() => setSelectedSnippet(snippet.id)}
+						onMouseEnter={() => setSelectedSnippet(snippet.id)}
 						onContextMenu={(e) => handleSnippetFileContextMenu(e, snippet.title)}
 						>
 						<SnippetItem fileData={snippet} />
@@ -397,7 +447,7 @@ const MyFolders = () => {
 					>
 						{menu.type === "file" && (
 							<>
-								<button onClick={handleRenameSnippet} className={Styles.snippetFileButton}>
+								<button onClick={handleShowRenameSnippetModal} className={Styles.snippetFileButton}>
 									Rename Snippet
 								</button>
 								<button onClick={handleDeleteSnippet} className={Styles.snippetFileButton}>
