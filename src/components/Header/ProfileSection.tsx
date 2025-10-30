@@ -40,7 +40,7 @@ const ProfileSection = ({ onLogout }) => {
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute top-14 right-0 mt-2 py-1 w-48 bg-white shadow-lg rounded-md overflow-hidden border border-gray-200 z-10 [&>button]:cursor-pointer">
+                <div className="absolute top-9 right-1 mt-2 py-1 w-48 bg-white shadow-lg rounded-md overflow-hidden border border-gray-200 z-10 [&>button]:cursor-pointer">
                     <button
                         onClick={handleGoToProfile}
                         className="w-full text-left px-4 py-2 hover:bg-[var(--background)] flex items-center gap-x-2"

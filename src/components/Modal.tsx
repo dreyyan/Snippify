@@ -57,16 +57,24 @@ const Modal: React.FC<ModalProps> = ({ isOpen = true, onClose, type, onConfirm, 
 
     return (
         <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[1px] bg-black/40">
-            <div ref={modalRef} className={`border-2 border-[rgba(23,32,38,0.1)] bg-[var(--background)] rounded-lg shadow-md space-y-4 p-6  ${size === 'sm' ? 'w-70' : size === 'lg' ? 'w-128' : 'w-96'} ${className}`}>
+            <div ref={modalRef} className={`bg-[var(--background)] rounded-xs shadow-md
+                ${type === 'prompt' ? 'p-6' : 'p-4 pl-6'}
+                ${size === 'sm' ? 'w-90' : size === 'lg' ? 'w-128' : 'w-96'}
+                ${
+                type === 'warning' ? 'border-t-3 border-[var(--dialog-alert)]' :
+                type === 'error' ? 'border-t-3 border-[var(--dialog-error)]' :
+                type === 'info' ? 'border-t-3 border-[var(--primary)]' :
+                ''}
+                ${className}`}>
                 {/* Header */}
                 <span className="flex justify-between items-center gap-x-2 mb-3">
                     <div className="flex gap-x-2">
-                        <img src={`${type}-icon.svg`} className="size-6"/>
-                        {title && <p className="text-lg font-bold">{title}</p>}
+                        {/* <img src={`${type}-icon.svg`} className="size-6"/> */}
+                        {title && <p className="text-xl font-bold">{title}</p>}
                     </div>
                     {type !== 'prompt' &&
-                    <button onClick={onClose!} className="text-gray-500 hover:text-black">
-                        <img src="/close-icon.svg" className="size-6 cursor-pointer"/>
+                    <button onClick={onClose!}>
+                        <img src="/close-icon.svg" className="size-6 cursor-pointer opacity-90"/>
                     </button>
                     }
                 </span>
