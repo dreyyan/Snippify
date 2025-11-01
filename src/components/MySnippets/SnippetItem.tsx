@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Styles from "../../styles/Styles";
 import { useFileWindow } from "../../context/FileWindowContext";
 
@@ -31,7 +30,7 @@ const SnippetItem: React.FC<SnippetItemProps> = ({ fileData }) => {
         className={Styles.snippetItem}>
             <p className="text-left font-semibold">{title}</p>
             <p className="text-center">{language}</p>
-            <p className="text-right">{dateModified.toDateString()}</p>
+            <p className="text-right">{dateModified.toLocaleDateString('en-GB')}</p>
         </button>
     );
 };

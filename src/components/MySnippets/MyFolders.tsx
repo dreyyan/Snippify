@@ -17,11 +17,7 @@ const MyFolders = () => {
 	const [selectedFolder, setSelectedFolder] = useState(0);
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [snippets, setSnippets] = useState<Snippet[]>([]);
-	// const [snippetData, setSnippetData] = useState<SnippetData>({
-    // title: '',
-    // language: '',
-    // content: ''
-	// });
+	const [totalSnippets, setTotalSnippets] = useState(0);
 	const [menu, setMenu] = useState<{ 
 		visible: boolean;
 		x: number;
@@ -36,8 +32,16 @@ const MyFolders = () => {
 	});
 	const [searchbarInput, setSearchbarInput] = useState("");
 	const { openModal, closeModal } = useModal();
-	
-	// [EFFECT] Fetch user data on mount (user folders and snippets)
+
+	// * [LOGIC] Snippet count for selected folder
+	// Filter snippets for the selected folder
+	const visibleSnippets = snippets.filter(
+		snippet => snippet.folderId === selectedFolder
+	);
+
+	const snippetCount = visibleSnippets.length;
+
+	// * [EFFECT] Fetch user data on mount (user folders and snippets)
 	useEffect(() => {
 		const fetchData = async () => {
 			const data = await getUserFoldersAndSnippets();
@@ -53,29 +57,29 @@ const MyFolders = () => {
 	}, []);
 
 	// ============================== General Implementation ==============================
-	// [HANDLE: Hide/Close Menu] When user clicks outside the context menu
+	// * [HANDLE: Hide/Close Menu] When user clicks outside the context menu
 	const handleOutsideClick = () => {
 		if (menu.visible) setMenu({ ...menu, visible: false })
 	};
 
-	// [HANDLE: Show Menu] When user right clicks the snippet files' empty area
+	// * [HANDLE: Show Menu] When user right clicks the snippet files' empty area
 	const handleEmptyAreaContextMenu = (e: React.MouseEvent) => {
 		e.preventDefault();
 		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'empty' });
 	};
 
-    // [HANDLE] Search bar input field change
+    // * [HANDLE] Search bar input field change
     const handleSearchbarInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchbarInput(e.target.value);
     };
 
-	// [HANDLE] Clear the searchbar input
+	// * [HANDLE] Clear the searchbar input
 	const handleClearSearch = () => {
 		setSearchbarInput("");	
 	};
 
 	// ============================== Snippets Implementation ==============================
-	// [HANDLE: Show Menu] When user right clicks a snippet file
+	// * [HANDLE: Show Menu] When user right clicks a snippet file
 	const handleSnippetFileContextMenu = (e: React.MouseEvent, fileName: string) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -83,11 +87,11 @@ const MyFolders = () => {
 		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'file', target: fileName });
 	};
 
-	// [HANDLE: Add Snippet] Send a request to create a new snippet for the current user and update the local state
+	// * [HANDLE: Add Snippet] Send a request to create a new snippet for the current user and update the local state
 	const handleAddSnippet = async (snippetData: Omit<Snippet, 'id' | 'updatedAt'>) => {
 		const folderId = selectedFolder;
 
-		// [ERROR] Missing folder ID
+		// * [ERROR] Missing folder ID
 		if (!folderId) {
 			openModal(noSelectedFolderModal);
 			return;
@@ -118,11 +122,11 @@ const MyFolders = () => {
 		}
 	};
 
-	// [HANDLE: Rename Snippet] Send a request to rename the user's selected folder and update the local state
+	// * [HANDLE: Rename Snippet] Send a request to rename the user's selected folder and update the local state
 	const handleRenameSnippet = async (title: string) => {
 		const snippetId = selectedSnippet;
 
-		// [ERROR] Missing snippet ID
+		// ! [ERROR] Missing snippet ID
 		if (!snippetId) {
 			openModal(noSelectedSnippetModal);
 			return;
@@ -155,11 +159,11 @@ const MyFolders = () => {
 		}
 	};
 
-	// [HANDLE: Delete Snippet] Send a request to delete the user's selected folder and update the local state
+	// * [HANDLE: Delete Snippet] Send a request to delete the user's selected folder and update the local state
 	const handleDeleteSnippet = async () => {
 		const snippetId = selectedSnippet;
 
-		// [ERROR] No selected snippet
+		// ! [ERROR] No selected snippet
 		if (!snippetId) {
 			openModal(noSelectedSnippetModal);
 			return;
@@ -190,7 +194,7 @@ const MyFolders = () => {
 	};
 
 	// ============================== Folders Implementation ==============================
-	// [HANDLE: Show Menu] When user right clicks a folder
+	// * [HANDLE: Show Menu] When user right clicks a folder
 	const handleFolderContextMenu = (e: React.MouseEvent, folderName: string) => {
 		e.preventDefault();
 		e.stopPropagation();
@@ -198,7 +202,7 @@ const MyFolders = () => {
 		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'folder', target: folderName });
 	};
 	
-	// [HANDLE: Add Folder] Send a request to create a new folder for the current user and update the local state
+	// * [HANDLE: Add Folder] Send a request to create a new folder for the current user and update the local state
 	const handleAddFolder = async (name: string) => {
 		try {
 			const token = getToken();
@@ -228,11 +232,11 @@ const MyFolders = () => {
 		}
 	};
 
-	// [HANDLE: Rename Folder] Send a request to rename the user's selected folder and update the local state
+	// * [HANDLE: Rename Folder] Send a request to rename the user's selected folder and update the local state
 	const handleRenameFolder = async (name: string) => {
 		const folderId = selectedFolder;
 
-		// [ERROR] Missing folder ID
+		// ! [ERROR] Missing folder ID
 		if (!folderId) {
 			openModal(noSelectedFolderModal);
 			return;
@@ -262,7 +266,7 @@ const MyFolders = () => {
 		}
 	};
 
-	// [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
+	// * [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
 	const handleDeleteFolder = async (name: string, id: string) => {
 		try {
 			const token = getToken();
@@ -365,7 +369,6 @@ const MyFolders = () => {
 				/>
 			)
 		});
-		// handleRenameFolder(folder.name);
 	};
 
 	return (
@@ -406,7 +409,7 @@ const MyFolders = () => {
 						className={`${Styles.folderShortcut} flex justify-between items-center ${
 							folder.id === selectedFolder ? 'shadow-sm bg-white text-[var(--primary)]' : ''
 						}`}>
-						<span>{folder.name}</span>
+						<span className="text-md">{folder.name}</span>
 						{/* Folder - Operations */}
 						{folder.id === selectedFolder &&
 						<div className="space-x-2">
@@ -443,62 +446,66 @@ const MyFolders = () => {
 		<div
 		onClick={handleOutsideClick}
 		onContextMenu={handleEmptyAreaContextMenu}
-		className="border border-l-0 border-[rgba(90,90,90,0.2)] col-span-5 shadow-md bg-white flex flex-col items-center min-h-100">
+		className="border border-l-0 border-[rgba(90,90,90,0.2)] col-span-5 shadow-md bg-white flex flex-col min-h-100">
 			{/* Details Header */}
-			<span className="w-full grid grid-cols-3 px-4 py-2 [&>p]:text-xs shadow-md">
+			<span className="w-full grid grid-cols-3 px-7 py-2 [&>p]:text-xs shadow-md">
 				<p className="text-left">Name</p>
 				<p className="text-center">Language</p>
 				<p className="text-right">Date Modified</p>
 			</span>
 
-				{/* Snippet Files */}
-				<div className="w-full h-full pt-2">
-					{snippets
-					.filter(snippet => snippet.folderId === selectedFolder)
-					.map((snippet) => (
-						<div
-						key={snippet.id}
-						onMouseEnter={() => setSelectedSnippet(snippet.id)}
-						onContextMenu={(e) => handleSnippetFileContextMenu(e, snippet.title)}
-						>
-						<SnippetItem fileData={snippet} />
-						</div>
-					))
-					}
-				</div>
-
-				{/* Context Menu */}
-				{menu.visible && (
+			{/* Snippet Files */}
+			<div className="w-full h-full px-3 py-3 space-y-1 bg-[var(--background)]">
+				{snippets
+				.filter(snippet => snippet.folderId === selectedFolder)
+				.map((snippet) => (
 					<div
-						style={{
-							top: menu.y,
-							left: menu.x,
-						}}
-						className="absolute flex flex-col items-start bg-white border border-gray-300 rounded-md p-1 shadow-md"
+					key={snippet.id}
+					onMouseEnter={() => setSelectedSnippet(snippet.id)}
+					onContextMenu={(e) => handleSnippetFileContextMenu(e, snippet.title)}
 					>
-						{menu.type === "file" && (
-							<>
-								<button onClick={handleShowRenameSnippetModal} className={Styles.snippetFileButton}>
-									Rename Snippet
-								</button>
-								<button onClick={handleDeleteSnippet} className={Styles.snippetFileButton}>
-									Delete Snippet
-								</button>
-							</>
-						)}
-						
-						{menu.type === "empty" && (
-							<>
-								<button onClick={handleShowNewSnippetModal} className={Styles.snippetFileButton}>
-									New Snippet
-								</button>
-								<button onClick={handleShowNewFolderModal} className={Styles.snippetFileButton}>
-									New Folder
-								</button>
-							</>
-						)}
+					<SnippetItem fileData={snippet} />
 					</div>
-				)}
+				))
+				}
+			</div>
+
+			<div className="py-1 px-2">
+				<p className="text-xs">{snippetCount} Total Snippet/s</p>
+			</div>
+
+			{/* Context Menu */}
+			{menu.visible && (
+				<div
+					style={{
+						top: menu.y,
+						left: menu.x,
+					}}
+					className="absolute flex flex-col items-start bg-white border border-gray-300 rounded-md p-1 shadow-md"
+				>
+					{menu.type === "file" && (
+						<>
+							<button onClick={handleShowRenameSnippetModal} className={Styles.snippetFileButton}>
+								Rename Snippet
+							</button>
+							<button onClick={handleDeleteSnippet} className={Styles.snippetFileButton}>
+								Delete Snippet
+							</button>
+						</>
+					)}
+					
+					{menu.type === "empty" && (
+						<>
+							<button onClick={handleShowNewSnippetModal} className={Styles.snippetFileButton}>
+								New Snippet
+							</button>
+							<button onClick={handleShowNewFolderModal} className={Styles.snippetFileButton}>
+								New Folder
+							</button>
+						</>
+					)}
+				</div>
+			)}
 		</div>
 	</div>
 	);
