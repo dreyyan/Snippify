@@ -5,7 +5,7 @@ const Banner = () => {
 
     // [HANDLE] Navigate to 
     const handleBannerClick = () => {
-        navigate('/');
+        navigate('/home');
     };
     return (
         <button onClick={handleBannerClick} className="group cursor-pointer flex items-center space-x-3 transition-transform duration-300 hover:-translate-x-1">

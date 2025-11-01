@@ -1,6 +1,5 @@
 // [IMPORT] Styles
 import "../styles/index.css";
-import Styles from "../styles/Styles";
 
 // [IMPORT] Components
 import { useEffect, useState } from "react";
@@ -94,7 +93,10 @@ const MySnippets = () => {
     
     return (
         <div className="flex flex-col gap-y-2 h-full mx-16 my-12 px-12 py-10 rounded-xl shadow-xl bg-[#FFFFFF]">
-            <h2>Welcome, {user?.name || "User"}.</h2>
+            <span className="flex gap-x-2">
+                <p className="text-2xl">Welcome,</p>
+                <p className="text-2xl font-semibold">{user?.name || "User"}.</p>
+            </span>
             <MyFolders/>
         </div>
   );
