@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 
 // Page Components
 import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
 import SignUp from "./pages/auth/SignUp";
 import Login from "./pages/auth/Login";
 
@@ -33,7 +32,6 @@ function App() {
 
             {/* Routes: Features */}
             <Route path="/home" element={<Home/>}/>
-            <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/my-snippets" element={<MySnippets/>}/>
             <Route path="/my-links" element={<MyLinks/>}/>
 

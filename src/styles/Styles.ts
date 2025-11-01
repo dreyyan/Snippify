@@ -32,7 +32,6 @@ const Styles = {
     tabsContainer: "flex gap-x-2",
     tabActiveButton: "text-xs font-bold px-4 py-2 rounded-t-md text-[var(--text-primary)] bg-white transition-colors duration-200 cursor-pointer",
     tabButton: "flex items-center gap-x-2 text-sm font-bold px-4 py-2 rounded-t-md text-[var(--text-primary)] bg-[var(--background)] transition-colors duration-200 cursor-pointer",
-    container: "grid grid-cols-7 box-border bg-white shadow-md px-12 py-14",
     folderShortcut: "flex justify-between items-center text-xs text-left px-4 font-bold text-[var(--background)] py-2 cursor-pointer",
     snippetItem: "grid grid-cols-3 px-4 py-2 text-sm w-full border-b border-[rgba(90,90,90,0.2)] shadow-sm bg-[#FFFFFF] hover:bg-[#E6F6FB] cursor-pointer",
     folderItem: "flex justify-between px-4 py-1 w-full text-sm border-b border-[rgba(90,90,90,0.2)] hover:border-t-red-500 cursor-pointer",

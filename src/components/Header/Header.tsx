@@ -33,7 +33,6 @@ const Header = () => {
             {/* [C]enter: Navigation Links */}
             <div className="space-x-6 ml-auto pr-12">
                <Link to="/home" className={Styles.headerLink}>Home</Link>
-               <Link to="/dashboard" className={Styles.headerLink}>Dashboard</Link>
                <Link to="/my-snippets" className={Styles.headerLink}>My Snippets</Link>
                <Link to="/my-links" className={Styles.headerLink}>My Links</Link>
             </div>

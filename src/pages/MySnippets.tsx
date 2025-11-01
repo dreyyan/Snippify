@@ -5,9 +5,9 @@ import Styles from "../styles/Styles";
 // [IMPORT] Components
 import { useEffect, useState } from "react";
 import MyFolders from "../components/MySnippets/MyFolders";
-import Drafts from "../components/MySnippets/Recents";
-import Favorites from "../components/MySnippets/Favorites";
 import { useNavigate } from "react-router-dom";
+import { fetchUserData } from "../utils/auth";
+import type { User} from "../utils/types";
 
 interface Snippet {
     id: number;
@@ -22,12 +22,6 @@ interface Folder {
     snippets: Snippet[];
 }
 
-interface User {
-    id: number;
-    name: string;
-    folders: Folder[];
-}
-
 const MySnippets = () => {
     document.title = "Snippify: My Snippets";
 
@@ -35,13 +29,33 @@ const MySnippets = () => {
     
     // States
     const [folders, setFolders] = useState<Folder[]>();
-    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
-    const tabs = [
-        {name: 'My Folders', iconUrl: 'my-folders-icon.svg'},
-        {name: 'Drafts', iconUrl: 'drafts-icon.svg'},
-        {name: 'Favorites', iconUrl: 'favorites-icon.svg'}
-    ];
+    const [user, setUser] = useState<User|null>(null);
+
+	// [EFFECT] Fetch user data on mount (user info)
+	useEffect(() => {
+		const fetchData = async () => {
+            const user = localStorage.getItem("user");
+            
+            // [ERROR] Missing user
+            if (!user) return;
+
+            // Get user ID from data
+            const parsedUser = JSON.parse(user);
+            const userId = parsedUser.id;
+
+            // Fetch actual user data
+			const data = await fetchUserData(userId);
+
+            console.log(data);
+			// If data exists, update folders and snippets states
+			if (data) {
+				setUser(data);
+			}
+		};
+
+		fetchData();
+	}, []);
 
     // [EFFECT] Retrieve user data from local storage
     useEffect(() => {
@@ -79,23 +93,9 @@ const MySnippets = () => {
     if (loading) return <div>Loading...</div>;
     
     return (
-        <div className="flex flex-col px-12 py-6">
-            {/* Windows Tab */}
-            <div className={Styles.tabsContainer}>
-                {tabs && tabs.map((tab, i) => (
-                    <button onClick={() => setPage(i + 1)} className={`${Styles.tabButton} ${page === i + 1 && 'bg-white'}`}><img src={`/${tab.iconUrl}`} className="size-4"/>{tab.name}</button>
-                ))}
-            </div>
-            {/* Tab render based on page count */}
-            {page === 1 &&
-                <MyFolders/>
-            }
-            {page === 2 &&
-                <Drafts/>
-            }
-            {page === 3 &&
-                <Favorites/>
-            }
+        <div className="flex flex-col gap-y-2 h-full mx-16 my-12 px-12 py-10 rounded-xl shadow-xl bg-[#FFFFFF]">
+            <h2>Welcome, {user?.name || "User"}.</h2>
+            <MyFolders/>
         </div>
   );
 };

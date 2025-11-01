@@ -423,7 +423,7 @@ const MyFolders = () => {
 	};
 
 	return (
-	<div className={Styles.container}>
+	<div className="grid grid-cols-7 my-auto">
 			{/* Navigation Pane - Folder (Tree View) */}
 			{folders && folders.length > 0 ?
 			(
@@ -447,7 +447,7 @@ const MyFolders = () => {
 
 					<div
 					onContextMenu={handleEmptyFolderAreaContextMenu}
-					className="bg-[var(--secondary)]/80 flex flex-col flex-1"
+					className="bg-[var(--secondary)]/80 rounded-bl-xl flex flex-col flex-1"
 					>
 					{/* Folders Display */}
 					{folders

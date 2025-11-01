@@ -81,8 +81,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen = true, onClose, type, onConfirm, 
 
                 {/* Children Props */}
                 {children ? <div>{children}</div> : <p className="text-sm mb-4">{content}</p>}
-                
-                {/* Buttons */}
             </div>
         </div>
     );

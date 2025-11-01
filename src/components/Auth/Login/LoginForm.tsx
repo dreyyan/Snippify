@@ -76,8 +76,8 @@ const SignUpForm = () => {
                 // [DEBUG] Display token
                 console.info(`Token: ${data.data.token}`);
 
-                // Navigate to dashboard
-                navigate('/dashboard');
+                // Navigate to 'My Snippets'
+                navigate('/my-snippets');
             } else {
                 alert(data.message || "Login failed")
                 return;
