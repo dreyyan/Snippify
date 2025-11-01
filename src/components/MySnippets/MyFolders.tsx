@@ -17,12 +17,11 @@ const MyFolders = () => {
 	const [selectedFolder, setSelectedFolder] = useState(0);
 	const [folders, setFolders] = useState<Folder[]>([]);
 	const [snippets, setSnippets] = useState<Snippet[]>([]);
-	const [totalSnippets, setTotalSnippets] = useState(0);
 	const [menu, setMenu] = useState<{ 
 		visible: boolean;
 		x: number;
 		y: number;
-		type: "file" | "folder" | "empty" | ""; 
+		type: "folder" | "file" | "foldersArea" | "snippetFilesArea" | ""; 
 		target?: string; 
 	}>({
 		visible: false,
@@ -65,7 +64,7 @@ const MyFolders = () => {
 	// * [HANDLE: Show Menu] When user right clicks the snippet files' empty area
 	const handleEmptyAreaContextMenu = (e: React.MouseEvent) => {
 		e.preventDefault();
-		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'empty' });
+		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'snippetFilesArea' });
 	};
 
     // * [HANDLE] Search bar input field change
@@ -195,12 +194,21 @@ const MyFolders = () => {
 
 	// ============================== Folders Implementation ==============================
 	// * [HANDLE: Show Menu] When user right clicks a folder
-	const handleFolderContextMenu = (e: React.MouseEvent, folderName: string) => {
+	const handleFolderContextMenu = (e: React.MouseEvent, folderId: number, folderName: string) => {
 		e.preventDefault();
 		e.stopPropagation();
 
+		setSelectedFolder(folderId); // Update selected folder
 		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'folder', target: folderName });
 	};
+
+	// * [HANDLE: Show Menu] When user right click	s a folder
+	const handleEmptyFolderAreaContextMenu = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'foldersArea' });
+	};	
 	
 	// * [HANDLE: Add Folder] Send a request to create a new folder for the current user and update the local state
 	const handleAddFolder = async (name: string) => {
@@ -376,8 +384,8 @@ const MyFolders = () => {
 			{/* Navigation Pane - Folder (Tree View) */}
 			{folders && folders.length > 0 ?
 			(
-				<div className=" rounded-l-xl flex flex-col col-span-2 border-[rgba(131,131,131,0.2)] shadow-md bg-[var(--secondary)]">
-					<div className="flex border-1 border-[rgba(90,90,90,0.2)] shadow-sm rounded-sm bg-[#FFFFFF] my-3 mx-3">
+				<div className=" rounded-l-xl flex flex-col col-span-2 border-[rgba(131,131,131,0.2)] shadow-lg bg-[var(--primary)]">
+					<div className="flex border-1 border-[rgba(90,90,90,0.2)] shadow-sm rounded-l-sm bg-[#FFFFFF] my-3 mx-3">
 						{/* Search Bar */}
 						<input
 						type="text"
@@ -389,10 +397,15 @@ const MyFolders = () => {
 						{/* Close Button */}
 						{searchbarInput &&
 						<button type="button" onClick={handleClearSearch} className="cursor-pointer">
-							<img src="/close-icon.svg" className="size-5" alt="Clear Input"/>
+							<img src="/close-icon.svg" className="size-5"/>
 						</button>
 						}
 					</div>
+
+					<div
+					onContextMenu={handleEmptyFolderAreaContextMenu}
+					className="bg-[var(--secondary)]/80 flex flex-col flex-1"
+					>
 					{/* Folders Display */}
 					{folders
 						.filter((folder) =>
@@ -405,9 +418,9 @@ const MyFolders = () => {
 							setSelectedFolder(folder.id);
 							console.log(`Selected Folder: ${folder.id}`);
 						}}
-						onContextMenu={(e) => handleFolderContextMenu(e, folder.name)}
-						className={`${Styles.folderShortcut} flex justify-between items-center ${
-							folder.id === selectedFolder ? 'shadow-sm bg-white text-[var(--primary)]' : ''
+						onContextMenu={(e) => handleFolderContextMenu(e, folder.id, folder.name)}
+						className={`${Styles.folderShortcut} ${
+							folder.id === selectedFolder ? 'shadow-sm bg-white text-[var(--primary)]' : 'text-[var(--text-on-primary)]/80'
 						}`}>
 						<span className="text-md">{folder.name}</span>
 						{/* Folder - Operations */}
@@ -433,8 +446,9 @@ const MyFolders = () => {
 						</button>
 						</div>
 						}
-						</div>
+						</div>	
 					))}
+					</div>
 				</div>
 			) : (
 				<div className="col-span-2 flex flex-col justify-center items-center shadow-md text-sm text-[var(--background)] border-[rgba(131,131,131,0.2)] bg-[var(--secondary)]">
@@ -493,14 +507,24 @@ const MyFolders = () => {
 							</button>
 						</>
 					)}
-					
-					{menu.type === "empty" && (
+					{menu.type === "foldersArea" && (
+						<>
+							<button onClick={handleShowNewFolderModal} className={Styles.snippetFileButton}>
+								New Folder
+							</button>
+						</>
+					)}
+					{menu.type === "folder" && (
+						<>
+							<button onClick={handleShowRenameFolderModal} className={Styles.snippetFileButton}>
+								Rename Folder
+							</button>
+						</>
+					)}
+					{menu.type === "snippetFilesArea" && (
 						<>
 							<button onClick={handleShowNewSnippetModal} className={Styles.snippetFileButton}>
 								New Snippet
-							</button>
-							<button onClick={handleShowNewFolderModal} className={Styles.snippetFileButton}>
-								New Folder
 							</button>
 						</>
 					)}
