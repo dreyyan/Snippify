@@ -6,7 +6,6 @@ import { getUserFoldersAndSnippets, getToken } from "../../utils/auth";
 import { useModal } from "../../context/ModalContext";
 import type { Folder, Snippet } from "../../utils/types";
 import NewSnippetForm from "./NewSnippetForm";
-import FolderItem from "./FolderItem"; // Consider deletion
 import NewFolderForm from "./NewFolderForm";
 import RenameFolderForm from "./RenameFolderForm";
 import { failedFolderCreationModal, failedFolderDeletionModal, failedFolderRenameModal, failedSnippetCreationModal, failedSnippetDeletionModal, failedSnippetRenameModal, folderCreatedModal, folderDeletedModal, folderRenamedModal, generalErrorModal, noFoldersModal, noSelectedFolderModal, noSelectedSnippetModal, snippetCreatedModal, snippetDeletedModal, snippetRenamedModal } from "../../utils/openPresets";
@@ -35,6 +34,7 @@ const MyFolders = () => {
 		y: 0,
 		type: "",
 	});
+	const [searchbarInput, setSearchbarInput] = useState("");
 	const { openModal, closeModal } = useModal();
 	
 	// [EFFECT] Fetch user data on mount (user folders and snippets)
@@ -62,6 +62,16 @@ const MyFolders = () => {
 	const handleEmptyAreaContextMenu = (e: React.MouseEvent) => {
 		e.preventDefault();
 		setMenu({ visible: true, x: e.pageX, y: e.pageY, type: 'empty' });
+	};
+
+    // [HANDLE] Search bar input field change
+    const handleSearchbarInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchbarInput(e.target.value);
+    };
+
+	// [HANDLE] Clear the searchbar input
+	const handleClearSearch = () => {
+		setSearchbarInput("");	
 	};
 
 	// ============================== Snippets Implementation ==============================
@@ -363,44 +373,65 @@ const MyFolders = () => {
 			{/* Navigation Pane - Folder (Tree View) */}
 			{folders && folders.length > 0 ?
 			(
-				<div className="col-span-2 border-[rgba(131,131,131,0.2)] flex flex-col shadow-md bg-[var(--secondary)]">
-				{folders.map((folder) => (
-					<div
-					key={folder.id}
-					onClick={() => {
-						setSelectedFolder(folder.id);
-						console.log(`Selected Folder: ${folder.id}`);
-					}}
-					onContextMenu={(e) => handleFolderContextMenu(e, folder.name)}
-					className={`${Styles.folderShortcut} flex justify-between items-center ${
-						folder.id === selectedFolder ? 'shadow-sm bg-white text-[var(--primary)]' : ''
-					}`}>
-					<span>{folder.name}</span>
-					{/* Folder - Operations */}
-					{folder.id === selectedFolder &&
-					<div className="space-x-2">
-					<button
-						onClick={(e) => {
-						e.stopPropagation();
-						handleShowRenameFolderModal();
-						}}
-						className="cursor-pointer hover:opacity-70 transition"
-					>
-							<img src="/rename-folder-icon.svg" className="size-4" alt="Rename folder" />
-					</button>
-					<button
-						onClick={(e) => {
-						e.stopPropagation();
-						handleDeleteFolder(folder.name, folder.id);
-						}}
-						className="cursor-pointer hover:opacity-70 transition"
-					>
-							<img src="/delete-folder-icon.svg" className="size-4" alt="Delete folder" />
-					</button>
+				<div className=" rounded-l-xl flex flex-col col-span-2 border-[rgba(131,131,131,0.2)] shadow-md bg-[var(--secondary)]">
+					<div className="flex border-1 border-[rgba(90,90,90,0.2)] shadow-sm rounded-sm bg-[#FFFFFF] my-3 mx-3">
+						{/* Search Bar */}
+						<input
+						type="text"
+						name="searchbar"
+						placeholder="Search folder..."
+						value={searchbarInput}
+						onChange={handleSearchbarInputChange}
+						required className={Styles.searchbarInput}/>
+						{/* Close Button */}
+						{searchbarInput &&
+						<button type="button" onClick={handleClearSearch} className="cursor-pointer">
+							<img src="/close-icon.svg" className="size-5" alt="Clear Input"/>
+						</button>
+						}
 					</div>
-					}
-					</div>
-				))}
+					{/* Folders Display */}
+					{folders
+						.filter((folder) =>
+						folder.name.toLowerCase().includes(searchbarInput.toLowerCase()))
+						.sort((a, b) => a.name.localeCompare(b.name))
+						.map((folder) => (
+						<div
+						key={folder.id}
+						onClick={() => {
+							setSelectedFolder(folder.id);
+							console.log(`Selected Folder: ${folder.id}`);
+						}}
+						onContextMenu={(e) => handleFolderContextMenu(e, folder.name)}
+						className={`${Styles.folderShortcut} flex justify-between items-center ${
+							folder.id === selectedFolder ? 'shadow-sm bg-white text-[var(--primary)]' : ''
+						}`}>
+						<span>{folder.name}</span>
+						{/* Folder - Operations */}
+						{folder.id === selectedFolder &&
+						<div className="space-x-2">
+						<button
+							onClick={(e) => {
+							e.stopPropagation();
+							handleShowRenameFolderModal();
+							}}
+							className="cursor-pointer hover:opacity-70 transition"
+						>
+								<img src="/rename-folder-icon.svg" className="size-4" alt="Rename folder" />
+						</button>
+						<button
+							onClick={(e) => {
+							e.stopPropagation();
+							handleDeleteFolder(folder.name, folder.id);
+							}}
+							className="cursor-pointer hover:opacity-70 transition"
+						>
+								<img src="/delete-folder-icon.svg" className="size-4" alt="Delete folder" />
+						</button>
+						</div>
+						}
+						</div>
+					))}
 				</div>
 			) : (
 				<div className="col-span-2 flex flex-col justify-center items-center shadow-md text-sm text-[var(--background)] border-[rgba(131,131,131,0.2)] bg-[var(--secondary)]">

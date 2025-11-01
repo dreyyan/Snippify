@@ -38,7 +38,9 @@ const Styles = {
     folderItem: "flex justify-between px-4 py-1 w-full text-sm border-b border-[rgba(90,90,90,0.2)] hover:border-t-red-500 cursor-pointer",
     snippetFileButton: "text-start text-sm w-full px-2 py-1 hover:bg-[rgba(90,90,90,0.1)] cursor-pointer",
 
-    // Modal
+    // MyFolders
+    searchbarInput: "w-[86%] px-3 py-2 text-sm focus:outline-none focus:ring-0",
+
 };
 
 export default Styles;

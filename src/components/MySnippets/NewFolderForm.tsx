@@ -4,7 +4,7 @@ import { useModal } from "../../context/ModalContext";
 
 const NewFolderForm: React.FC<{ onSubmit: (name: string) => void, handleCloseModal: () => void }> = ({ onSubmit, handleCloseModal }) => {
     const [folderName, setFolderName] = useState("");
-    const { openModal, closeModal } = useModal();
+    const { openModal } = useModal();
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,7 +25,7 @@ const NewFolderForm: React.FC<{ onSubmit: (name: string) => void, handleCloseMod
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
         type="text"
-        placeholder="e.g. JavaScript"
+        placeholder="e.g. Loops"
         value={folderName}
         onChange={e => setFolderName(e.target.value)}
         className={Styles.formInput}
