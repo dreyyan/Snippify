@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import Styles from "../styles/Styles";
 
 type BaseModalProps = {
@@ -59,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen = true, onClose, type, onConfirm, 
         <div className="fixed inset-0 flex items-center justify-center z-50 backdrop-blur-[1px] bg-black/40">
             <div ref={modalRef} className={`bg-[var(--background)] rounded-xs shadow-md
                 ${type === 'prompt' ? 'p-6' : 'p-4 pl-6'}
-                ${size === 'sm' ? 'w-90' : size === 'lg' ? 'w-128' : 'w-96'}
+                ${size === 'sm' ? 'w-90' : size === 'lg' ? 'w-140' : 'w-114'}
                 ${
                 type === 'warning' ? 'border-t-3 border-[var(--dialog-alert)]' :
                 type === 'error' ? 'border-t-3 border-[var(--dialog-error)]' :

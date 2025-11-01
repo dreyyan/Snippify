@@ -10,6 +10,7 @@ import NewFolderForm from "./NewFolderForm";
 import RenameFolderForm from "./RenameFolderForm";
 import { failedFolderCreationModal, failedFolderDeletionModal, failedFolderRenameModal, failedSnippetCreationModal, failedSnippetDeletionModal, failedSnippetRenameModal, folderCreatedModal, folderDeletedModal, folderRenamedModal, generalErrorModal, noFoldersModal, noSelectedFolderModal, noSelectedSnippetModal, snippetCreatedModal, snippetDeletedModal, snippetRenamedModal } from "../../utils/openPresets";
 import RenameSnippetForm from "./RenameSnippetForm";
+import DeleteFolderForm from "./DeleteFolderForm";
 
 const MyFolders = () => {
 	// States
@@ -275,13 +276,21 @@ const MyFolders = () => {
 	};
 
 	// * [HANDLE: Delete Folder] Send a request to delete the user's selected folder and update the local state
-	const handleDeleteFolder = async (name: string, id: string) => {
+	const handleDeleteFolder = async (name: string) => {
+		const folderId = selectedFolder;
+
+		// ! [ERROR] No selected folder
+		if (!folderId) {
+			openModal(noSelectedFolderModal);
+			return;
+		}
+
 		try {
 			const token = getToken();
-			const response = await fetch(`http://localhost:3000/api/folders/${id}`, {
+			const response = await fetch(`http://localhost:3000/api/folders/${folderId}`, {
 				method: "DELETE",
 				headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}`, },
-				body: JSON.stringify({ id }),
+				body: JSON.stringify({ folderId }),
 			});
 
 			const data = await response.json();
@@ -290,7 +299,11 @@ const MyFolders = () => {
 			if (response.ok) {
 				console.info(`Folder "${name}" deleted successfully.`);
 				openModal(folderDeletedModal);
-				setFolders(prev => prev.filter(folder => folder.id !== id));
+				setFolders(prev => prev.filter(folder => folder.id !== folderId));
+
+				// Reset selected folder and snippets
+				setSelectedFolder(0);
+				setSnippets(prev => prev.filter(snippet => snippet.folderId !== folderId));
 			} else {
 				console.error("Failed to delete folder:", data.message);
 				openModal(failedFolderDeletionModal);
@@ -379,6 +392,36 @@ const MyFolders = () => {
 		});
 	};
 
+	const handleShowDeleteFolderModal = () => {
+		const folder = folders.find(f => f.id === selectedFolder);
+
+		// ! [ERROR]: No selected folder
+		if (!folder) {
+			openModal({
+			type: "error",
+			title: "No Folder Selected",
+			content: "Please select a folder to delete.",
+			});
+			return;
+		}
+
+		openModal({
+			type: 'prompt',
+			title: 'Delete Folder',
+			size: 'md',
+			children: (
+				<DeleteFolderForm
+				folderName={folder.name}
+				onSubmit={name => {
+					handleDeleteFolder(name);
+					closeModal();
+				}}
+				handleCloseModal={closeModal}
+				/>
+			)
+		});
+	};
+
 	return (
 	<div className={Styles.container}>
 			{/* Navigation Pane - Folder (Tree View) */}
@@ -438,7 +481,7 @@ const MyFolders = () => {
 						<button
 							onClick={(e) => {
 							e.stopPropagation();
-							handleDeleteFolder(folder.name, folder.id);
+							handleDeleteFolder(folder.name);
 							}}
 							className="cursor-pointer hover:opacity-70 transition"
 						>
@@ -518,6 +561,9 @@ const MyFolders = () => {
 						<>
 							<button onClick={handleShowRenameFolderModal} className={Styles.snippetFileButton}>
 								Rename Folder
+							</button>
+							<button onClick={handleShowDeleteFolderModal} className={Styles.snippetFileButton}>
+								Delete Folder
 							</button>
 						</>
 					)}

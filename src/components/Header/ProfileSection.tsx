@@ -40,22 +40,22 @@ const ProfileSection = ({ onLogout }) => {
 
             {/* Dropdown Menu */}
             {isOpen && (
-                <div className="absolute top-9 right-1 mt-2 py-1 w-48 bg-white shadow-lg rounded-md overflow-hidden border border-gray-200 z-10 [&>button]:cursor-pointer">
+                <div className="absolute top-9 right-1 mt-2 py-1 w-34 bg-white shadow-lg rounded-md overflow-hidden border border-gray-200 z-10 [&>button]:cursor-pointer">
                     <button
                         onClick={handleGoToProfile}
-                        className="w-full text-left px-4 py-2 hover:bg-[var(--background)] flex items-center gap-x-2"
+                        className={Styles.navigationLink}
                     >
-                        <img src="profile-icon.svg" className="size-5" alt="" /> Profile
+                        <img src="profile-icon.svg" className="size-5" alt="Profile Icon"/> Profile
                     </button>
                     <button
                         onClick={handleGoToSettings}
-                        className="w-full text-left px-4 py-2 hover:bg-[var(--background)] flex items-center gap-x-2"
+                        className={Styles.navigationLink}
                     >
-                        <img src="settings-icon.svg" className="size-5" alt="" /> Settings
+                        <img src="settings-icon.svg" className="size-5" alt="Settings Icon"/> Settings
                     </button>
                     <button
                         onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 hover:bg-[var(--background)] flex items-center gap-x-2 text-red-600"
+                        className={`${Styles.navigationLink} text-red-600`}
                     >
                         <img src="logout-icon.svg" className="size-5" alt="" /> Logout
                     </button>

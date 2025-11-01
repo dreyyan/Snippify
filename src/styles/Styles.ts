@@ -41,6 +41,8 @@ const Styles = {
     // MyFolders
     searchbarInput: "w-[86%] px-3 py-2 text-xs focus:outline-none focus:ring-0",
 
+    // Header
+    navigationLink: "w-full text-sm text-right px-4 py-2 hover:bg-[var(--background)] flex items-end gap-x-2",
 };
 
 export default Styles;
